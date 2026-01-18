@@ -1,0 +1,2197 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مخاطر التزييف العميق | Deep Fake - عرض الأمن السيبراني</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0f172a;
+            --secondary: #1e293b;
+            --accent: #ef4444;
+            --accent-glow: rgba(239, 68, 68, 0.4);
+            --cyber-blue: #06b6d4;
+            --cyber-purple: #8b5cf6;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --gradient-1: linear-gradient(135deg, #ef4444 0%, #8b5cf6 100%);
+            --gradient-2: linear-gradient(135deg, #06b6d4 0%, #8b5cf6 100%);
+        }
+
+        .light {
+            --primary: #f8fafc;
+            --secondary: #e2e8f0;
+            --text: #0f172a;
+            --text-muted: #64748b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: var(--primary);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 80%, var(--accent-glow) 0%, transparent 40%),
+                radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.2) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.1) 0%, transparent 50%);
+            animation: bgFloat 20s ease-in-out infinite;
+        }
+
+        @keyframes bgFloat {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(2%, 2%) rotate(1deg); }
+            66% { transform: translate(-1%, 1%) rotate(-1deg); }
+        }
+
+        /* Grid Pattern */
+        .grid-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: var(--text);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            z-index: 999;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--gradient-1);
+            transition: width 0.5s ease;
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        /* Author Info Bar - Fixed at Top */
+        .author-bar {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            background: rgba(30, 41, 59, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 998;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.9rem;
+        }
+
+        .author-info {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .author-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .author-icon {
+            color: var(--cyber-blue);
+        }
+
+        .author-name {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .author-title {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .supervisor-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            background: rgba(139, 92, 246, 0.2);
+            border-radius: 20px;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .supervisor-icon {
+            color: var(--cyber-purple);
+        }
+
+        /* Main Content */
+        .presentation {
+            padding-top: 120px; /* Adjusted for author bar */
+            min-height: 100vh;
+        }
+
+        .slide {
+            display: none;
+            animation: slideIn 0.6s ease;
+            min-height: calc(100vh - 120px);
+            padding: 2rem;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Intro Slide */
+        .intro-slide {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            min-height: calc(100vh - 170px);
+        }
+
+        .glitch-container {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .main-title {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            animation: glitch 3s infinite;
+        }
+
+        @keyframes glitch {
+            0%, 90%, 100% { transform: translate(0); }
+            92% { transform: translate(-2px, 2px); }
+            94% { transform: translate(2px, -2px); }
+            96% { transform: translate(-2px, -2px); }
+            98% { transform: translate(2px, 2px); }
+        }
+
+        .subtitle {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+        }
+
+        .warning-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid var(--accent);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            color: var(--accent);
+            font-weight: 600;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 var(--accent-glow); }
+            50% { box-shadow: 0 0 0 20px transparent; }
+        }
+
+        .start-btn {
+            margin-top: 3rem;
+            padding: 1.25rem 3rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .start-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 40px var(--accent-glow);
+        }
+
+        /* Section Header */
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-number {
+            display: inline-block;
+            background: var(--gradient-1);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* Cards */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-1);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-1);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-icon.blue { background: var(--gradient-2); }
+        .card-icon.green { background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%); }
+        .card-icon.yellow { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .card-text {
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+
+        /* Example Card */
+        .example-card {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+
+        .example-label {
+            position: absolute;
+            top: -12px;
+            right: 20px;
+            background: var(--accent);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .example-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .example-content {
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+
+        .example-result {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(239, 68, 68, 0.2);
+            border-radius: 10px;
+            border-right: 4px solid var(--accent);
+        }
+
+        /* Threat Cards */
+        .threat-section {
+            margin: 3rem 0;
+        }
+
+        .threat-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .threat-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+
+        .threat-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .threat-list {
+            list-style: none;
+        }
+
+        .threat-item {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+            transition: all 0.3s;
+        }
+
+        .threat-item:hover {
+            border-color: var(--cyber-blue);
+            transform: translateX(-5px);
+        }
+
+        .threat-item-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(6, 182, 212, 0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--cyber-blue);
+            flex-shrink: 0;
+        }
+
+        .threat-item-content h4 {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .threat-item-content p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Demo Scene */
+        .demo-scene {
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .demo-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .demo-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .demo-dot.red { background: #ef4444; }
+        .demo-dot.yellow { background: #f59e0b; }
+        .demo-dot.green { background: #10b981; }
+
+        .demo-content {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .demo-visual {
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .fake-video {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border-radius: 15px;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-placeholder {
+            width: 100%;
+            height: 200px;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(6, 182, 212, 0.1) 2px,
+                rgba(6, 182, 212, 0.1) 4px
+            );
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .face-outline {
+            width: 80px;
+            height: 100px;
+            border: 3px dashed var(--accent);
+            border-radius: 40px 40px 30px 30px;
+            position: relative;
+            animation: faceGlitch 2s infinite;
+        }
+
+        @keyframes faceGlitch {
+            0%, 90%, 100% { border-color: var(--accent); }
+            92%, 96% { border-color: var(--cyber-blue); transform: translate(-2px, 0); }
+            94%, 98% { border-color: var(--cyber-purple); transform: translate(2px, 0); }
+        }
+
+        .face-eyes {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+        }
+
+        .eye {
+            width: 10px;
+            height: 10px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: blink 3s infinite;
+        }
+
+        @keyframes blink {
+            0%, 90%, 100% { transform: scaleY(1); }
+            95% { transform: scaleY(0.1); }
+        }
+
+        .deepfake-label {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            animation: labelPulse 1.5s infinite;
+        }
+
+        @keyframes labelPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .demo-text {
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .demo-chat {
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 15px;
+            padding: 1.5rem;
+        }
+
+        .chat-message {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            animation: chatIn 0.5s ease;
+        }
+
+        @keyframes chatIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .chat-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .chat-bubble {
+            background: rgba(255,255,255,0.1);
+            padding: 1rem;
+            border-radius: 15px 15px 15px 0;
+            max-width: 80%;
+        }
+
+        .chat-bubble.fake {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid var(--accent);
+        }
+
+        .chat-name {
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 0.25rem;
+            color: var(--cyber-blue);
+        }
+
+        /* Detection Cards */
+        .detection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .detection-card {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .detection-card:hover {
+            border-color: var(--success);
+            transform: scale(1.02);
+        }
+
+        .detection-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(16, 185, 129, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin: 0 auto 1rem;
+            color: var(--success);
+        }
+
+        .detection-title {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .detection-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Protection Section */
+        .protection-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            padding: 1rem 2rem;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 50px;
+            color: var(--text);
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tab-btn:hover, .tab-btn.active {
+            background: var(--gradient-1);
+            border-color: transparent;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .protection-list {
+            list-style: none;
+        }
+
+        .protection-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 15px;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .protection-item:hover {
+            border-color: var(--cyber-purple);
+            transform: translateX(-5px);
+        }
+
+        .protection-num {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .protection-content h4 {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .protection-content p {
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-right: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--gradient-1);
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 1.5rem;
+            padding-right: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            right: -8px;
+            top: 1.5rem;
+            width: 20px;
+            height: 20px;
+            background: var(--accent);
+            border-radius: 50%;
+            border: 4px solid var(--primary);
+        }
+
+        .timeline-date {
+            display: inline-block;
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--accent);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .timeline-title {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-desc {
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* Conclusion */
+        .conclusion-card {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(6, 182, 212, 0.2) 100%);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 30px;
+            padding: 3rem;
+            text-align: center;
+        }
+
+        .quote {
+            font-size: clamp(1.3rem, 3vw, 1.8rem);
+            font-weight: 700;
+            line-height: 1.8;
+            position: relative;
+            padding: 2rem;
+        }
+
+        .quote::before {
+            content: '"';
+            position: absolute;
+            top: -20px;
+            right: 20px;
+            font-size: 6rem;
+            color: var(--cyber-purple);
+            opacity: 0.3;
+        }
+
+        /* Navigation Arrows */
+        .nav-arrows {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1rem;
+            z-index: 100;
+        }
+
+        .arrow-btn {
+            width: 50px;
+            height: 50px;
+            background: rgba(30, 41, 59, 0.9);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--text);
+        }
+
+        .arrow-btn:hover:not(:disabled) {
+            background: var(--gradient-1);
+            border-color: transparent;
+            transform: scale(1.1);
+        }
+
+        .arrow-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .slide-counter {
+            background: rgba(30, 41, 59, 0.9);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Sidebar Menu */
+        .sidebar {
+            position: fixed;
+            top: 120px; /* Adjusted for author bar */
+            right: -320px;
+            width: 320px;
+            height: calc(100vh - 120px);
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border-left: 1px solid rgba(255,255,255,0.1);
+            padding: 2rem;
+            transition: right 0.3s;
+            z-index: 999;
+            overflow-y: auto;
+        }
+
+        .sidebar.open {
+            right: 0;
+        }
+
+        .sidebar-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .menu-item {
+            padding: 1rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background: rgba(239, 68, 68, 0.2);
+            border-right: 3px solid var(--accent);
+        }
+
+        .menu-num {
+            width: 25px;
+            height: 25px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Tools Section */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .tool-card {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2);
+        }
+
+        .tool-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--success);
+        }
+
+        .tool-name {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .tool-desc {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Animation Classes */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+
+        /* Stats Section */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        /* Video Scene Animation */
+        .scene-container {
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            overflow: hidden;
+        }
+
+        .scene-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .scene-title {
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .live-badge {
+            background: var(--accent);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            animation: livePulse 1s infinite;
+        }
+
+        @keyframes livePulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .scene-video {
+            position: relative;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            border-radius: 15px;
+            height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--cyber-blue);
+            animation: scanLine 2s linear infinite;
+            box-shadow: 0 0 20px var(--cyber-blue);
+        }
+
+        @keyframes scanLine {
+            0% { top: 0; }
+            100% { top: 100%; }
+        }
+
+        .face-scan {
+            width: 120px;
+            height: 150px;
+            border: 3px solid var(--cyber-blue);
+            border-radius: 60px 60px 40px 40px;
+            position: relative;
+            animation: faceScan 3s ease-in-out infinite;
+        }
+
+        @keyframes faceScan {
+            0%, 100% { border-color: var(--cyber-blue); box-shadow: 0 0 20px rgba(6, 182, 212, 0.5); }
+            50% { border-color: var(--accent); box-shadow: 0 0 20px var(--accent-glow); }
+        }
+
+        .face-features {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .feature-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--cyber-blue);
+            border-radius: 50%;
+            margin: 15px 0;
+            animation: dotPulse 1s infinite;
+        }
+
+        @keyframes dotPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.5); }
+        }
+
+        .warning-overlay {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(239, 68, 68, 0.9);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Footer with Credits */
+        .credits-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 0.75rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            z-index: 99;
+            font-size: 0.85rem;
+        }
+
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .footer-right {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+        }
+
+        .footer-icon {
+            color: var(--cyber-blue);
+            margin-left: 0.25rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav {
+                padding: 1rem;
+            }
+
+            .logo-text {
+                display: none;
+            }
+
+            .slide {
+                padding: 1rem;
+            }
+
+            .demo-content {
+                flex-direction: column;
+            }
+
+            .nav-arrows {
+                bottom: 3rem; /* Adjusted for footer */
+            }
+
+            .sidebar {
+                width: 100%;
+                right: -100%;
+                top: 120px;
+            }
+
+            .protection-tabs {
+                flex-direction: column;
+            }
+
+            .tab-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .author-bar {
+                flex-direction: column;
+                gap: 0.5rem;
+                padding: 0.5rem 1rem;
+                top: 60px;
+            }
+
+            .author-info {
+                gap: 1rem;
+                justify-content: center;
+            }
+
+            .credits-footer {
+                flex-direction: column;
+                gap: 0.5rem;
+                padding: 0.5rem 1rem;
+                text-align: center;
+            }
+
+            .footer-left, .footer-right {
+                justify-content: center;
+            }
+
+            .presentation {
+                padding-top: 150px; /* Adjusted for responsive author bar */
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--secondary);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+
+        /* Light Mode Adjustments */
+        .light .card,
+        .light .threat-item,
+        .light .protection-item,
+        .light .detection-card,
+        .light .demo-scene {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: rgba(0,0,0,0.1);
+        }
+
+        .light .nav,
+        .light .sidebar,
+        .light .author-bar,
+        .light .credits-footer {
+            background: rgba(248, 250, 252, 0.95);
+        }
+
+        .light .nav-btn,
+        .light .arrow-btn,
+        .light .slide-counter {
+            background: rgba(0,0,0,0.05);
+        }
+
+        .light .demo-chat,
+        .light .fake-video {
+            background: rgba(0,0,0,0.05);
+        }
+
+        .light .supervisor-info {
+            background: rgba(139, 92, 246, 0.1);
+            border-color: rgba(139, 92, 246, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation"></div>
+    <div class="grid-pattern"></div>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="logo">
+            <div class="logo-icon"><i class="fas fa-shield-virus"></i></div>
+            <span class="logo-text">ندوة الأمن السيبراني</span>
+        </div>
+        <div class="nav-controls">
+            <button class="nav-btn" onclick="toggleTheme()" aria-label="تبديل المظهر">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button class="nav-btn" onclick="toggleSidebar()" aria-label="القائمة">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Author Info Bar - Fixed at Top -->
+    <div class="author-bar">
+        <div class="author-info">
+            <div class="author-item">
+                <i class="fas fa-user author-icon"></i>
+                <div>
+                    <div class="author-name">سالم الحالمي</div>
+                    <div class="author-title">مقدم العرض</div>
+                </div>
+            </div>
+            <div class="supervisor-info">
+                <i class="fas fa-user-graduate supervisor-icon"></i>
+                <div>
+                    <div class="author-name">الأستاذة أسماء محمد</div>
+                    <div class="author-title">مشرفة العرض</div>
+                </div>
+            </div>
+        </div>
+        <div class="event-date">
+            <i class="far fa-calendar-alt" style="color: var(--text-muted); margin-left: 0.5rem;"></i>
+            <span style="color: var(--text-muted);">ندوة الأمن السيبراني 2024</span>
+        </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-title">
+            <i class="fas fa-list"></i>
+            فهرس العرض
+        </div>
+        <div class="menu-item active" onclick="goToSlide(0)">
+            <span class="menu-num">0</span>
+            <span>المقدمة</span>
+        </div>
+        <div class="menu-item" onclick="goToSlide(1)">
+            <span class="menu-num">1</span>
+            <span>ما هو التزييف العميق؟</span>
+        </div>
+        <div class="menu-item" onclick="goToSlide(2)">
+            <span class="menu-num">2</span>
+            <span>التهديدات السيبرانية</span>
+        </div>
+        <div class="menu-item" onclick="goToSlide(3)">
+            <span class="menu-num">3</span>
+            <span>أمثلة حية</span>
+        </div>
+        <div class="menu-item" onclick="goToSlide(4)">
+            <span class="menu-num">4</span>
+            <span>كيف نكتشف التزييف؟</span>
+        </div>
+        <div class="menu-item" onclick="goToSlide(5)">
+            <span class="menu-num">5</span>
+            <span>الحماية والوقاية</span>
+        </div>
+        <div class="menu-item" onclick="goToSlide(6)">
+            <span class="menu-num">6</span>
+            <span>الخاتمة</span>
+        </div>
+    </div>
+
+    <!-- Main Presentation -->
+    <main class="presentation">
+        <!-- Slide 0: Introduction -->
+        <section class="slide active" data-slide="0">
+            <div class="slide-container intro-slide">
+                <div class="glitch-container">
+                    <h1 class="main-title">التزييف العميق</h1>
+                </div>
+                <p class="subtitle">Deep Fake: التهديد الخفي للأمن السيبراني</p>
+                
+                <div class="warning-badge">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>عرض توعوي - ندوة الأمن السيبراني</span>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card fade-in-up delay-1">
+                        <div class="stat-number">400%</div>
+                        <div class="stat-label">زيادة في فيديوهات التزييف 2023</div>
+                    </div>
+                    <div class="stat-card fade-in-up delay-2">
+                        <div class="stat-number">$25M</div>
+                        <div class="stat-label">خسائر الاحتيال الصوتي سنوياً</div>
+                    </div>
+                    <div class="stat-card fade-in-up delay-3">
+                        <div class="stat-number">96%</div>
+                        <div class="stat-label">لا يستطيعون التمييز بين الحقيقي والمزيف</div>
+                    </div>
+                </div>
+
+                <button class="start-btn" onclick="nextSlide()">
+                    <span>ابدأ العرض التقديمي</span>
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- Slide 1: What is Deep Fake -->
+        <section class="slide" data-slide="1">
+            <div class="slide-container">
+                <div class="section-header">
+                    <span class="section-number">الجزء الأول</span>
+                    <h2 class="section-title">ما هو التزييف العميق؟</h2>
+                    <p class="section-subtitle">فهم التقنية التي تُنشئ واقعاً مُزيفاً</p>
+                </div>
+
+                <div class="cards-grid">
+                    <div class="card fade-in-up delay-1">
+                        <div class="card-icon"><i class="fas fa-brain"></i></div>
+                        <h3 class="card-title">التعريف البسيط</h3>
+                        <p class="card-text">
+                            تقنية تستخدم الذكاء الاصطناعي لإنشاء فيديوهات وصور وأصوات مزيفة 
+                            تبدو حقيقية بنسبة 100%. تعتمد على الشبكات العصبية العميقة لتعلم 
+                            ملامح الوجه والصوت.
+                        </p>
+                    </div>
+                    <div class="card fade-in-up delay-2">
+                        <div class="card-icon blue"><i class="fas fa-video"></i></div>
+                        <h3 class="card-title">كيف تعمل؟</h3>
+                        <p class="card-text">
+                            تقوم الخوارزميات بتحليل آلاف الصور والفيديوهات للشخص المستهدف، 
+                            ثم تُنشئ نموذجاً رقمياً يُمكن التحكم به لإنتاج محتوى جديد لم يحدث أبداً.
+                        </p>
+                    </div>
+                    <div class="card fade-in-up delay-3">
+                        <div class="card-icon yellow"><i class="fas fa-clock"></i></div>
+                        <h3 class="card-title">سرعة التطور</h3>
+                        <p class="card-text">
+                            في 2017 كانت مجرد تجربة أكاديمية. اليوم، يمكن لأي شخص 
+                            إنشاء فيديو مزيف باستخدام تطبيق على الهاتف في دقائق.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Scene: Obama Deep Fake -->
+                <div class="scene-container fade-in-up delay-4">
+                    <div class="scene-header">
+                        <div class="scene-title">
+                            <i class="fas fa-film"></i>
+                            مشهد تمثيلي: تجربة أوباما 2018
+                        </div>
+                        <span class="live-badge">مثال واقعي</span>
+                    </div>
+                    <div class="demo-content">
+                        <div class="demo-visual">
+                            <div class="scene-video">
+                                <div class="scan-line"></div>
+                                <div class="face-scan">
+                                    <div class="face-features">
+                                        <div class="feature-dot"></div>
+                                        <div class="feature-dot" style="animation-delay: 0.2s"></div>
+                                        <div class="feature-dot" style="animation-delay: 0.4s"></div>
+                                    </div>
+                                </div>
+                                <div class="warning-overlay">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    هذا الفيديو مزيف بالكامل
+                                </div>
+                            </div>
+                        </div>
+                        <div class="demo-text">
+                            <div class="example-card">
+                                <div class="example-label">الحدث: 2018</div>
+                                <div class="example-title">
+                                    <i class="fas fa-user-tie"></i>
+                                    باراك أوباما يقول كلمات مسيئة
+                                </div>
+                                <div class="example-content">
+                                    قام باحثون أمريكيون بإنشاء فيديو مزيف للرئيس أوباما 
+                                    وهو يقول كلمات بذيئة لـ **توعية الجمهور** بمخاطر هذه التقنية.
+                                </div>
+                                <div class="example-result">
+                                    <strong>النتيجة:</strong> تم خداع معظم المشاهدين.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 2: Cyber Threats -->
+        <section class="slide" data-slide="2">
+            <div class="slide-container">
+                <div class="section-header">
+                    <span class="section-number">الجزء الثاني</span>
+                    <h2 class="section-title">التهديدات السيبرانية</h2>
+                    <p class="section-subtitle">كيف يمكن اختراق الأمن باستخدام تقنية Deep Fake</p>
+                </div>
+
+                <div class="threat-section fade-in-up delay-1">
+                    <div class="threat-header">
+                        <div class="threat-icon"><i class="fas fa-money-bill-wave"></i></div>
+                        <h3 class="threat-title">الاحتيال المالي الصوتي</h3>
+                    </div>
+                    
+                    <div class="demo-scene">
+                        <div class="demo-header">
+                            <div class="demo-dot red"></div>
+                            <div class="demo-dot yellow"></div>
+                            <div class="demo-dot green"></div>
+                            <span>محاكاة هجمة احتيال صوتي على شركة</span>
+                        </div>
+                        <div class="demo-content">
+                            <div class="demo-visual">
+                                <div class="fake-video">
+                                    <div class="video-placeholder">
+                                        <div class="face-outline">
+                                            <div class="face-eyes">
+                                                <div class="eye"></div>
+                                                <div class="eye"></div>
+                                            </div>
+                                        </div>
+                                        <div class="deepfake-label">Deep Fake</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="demo-text">
+                                <div class="demo-chat">
+                                    <div class="chat-message">
+                                        <div class="chat-avatar">
+                                            <i class="fas fa-user-tie"></i>
+                                        </div>
+                                        <div class="chat-bubble">
+                                            <div class="chat-name">المدير المالي (مزيف)</div>
+                                            "مرحباً، أنا في اجتماع طارئ. أرسل فوراً 200,000 دولار إلى الحساب الجديد للمورد. الأرقام في رسالتي التالية."
+                                        </div>
+                                    </div>
+                                    <div class="chat-message">
+                                        <div class="chat-avatar">
+                                            <i class="fas fa-user-cog"></i>
+                                        </div>
+                                        <div class="chat-bubble fake">
+                                            <div class="chat-name">المحاسب</div>
+                                            "تم التحويل، سيدي. الصوت واضح جداً!"
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="threat-section fade-in-up delay-2">
+                    <div class="threat-header">
+                        <div class="threat-icon"><i class="fas fa-vote-yea"></i></div>
+                        <h3 class="threat-title">التأثير على الانتخابات</h3>
+                    </div>
+                    <ul class="threat-list">
+                        <li class="threat-item">
+                            <div class="threat-item-icon">
+                                <i class="fas fa-calendar-times"></i>
+                            </div>
+                            <div class="threat-item-content">
+                                <h4>نشر الفيديوهات المفبركة</h4>
+                                <p>فيديوهات لمرشحين وهم يعترفون بجرائم قبل ساعات من التصويت</p>
+                            </div>
+                        </li>
+                        <li class="threat-item">
+                            <div class="threat-item-icon">
+                                <i class="fas fa-comments"></i>
+                            </div>
+                            <div class="threat-item-content">
+                                <h4>تشويه السمعة</h4>
+                                <p>إنشاء مقاطع تظهر المرشح في مواقف غير أخلاقية أو متناقضة</p>
+                            </div>
+                        </li>
+                        <li class="threat-item">
+                            <div class="threat-item-icon">
+                                <i class="fas fa-bullhorn"></i>
+                            </div>
+                            <div class="threat-item-content">
+                                <h4>إعلانات سياسية مزيفة</h4>
+                                <p>إعلانات تدعي دعم شخصيات عامة لمرشحين لم يدعموهم</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 3: Real Examples -->
+        <section class="slide" data-slide="3">
+            <div class="slide-container">
+                <div class="section-header">
+                    <span class="section-number">الجزء الثالث</span>
+                    <h2 class="section-title">أمثلة حية من الواقع</h2>
+                    <p class="section-subtitle">أحداث حقيقية أثرت على أمن الدول والأفراد</p>
+                </div>
+
+                <div class="timeline fade-in-up delay-1">
+                    <div class="timeline-item">
+                        <span class="timeline-date">2022 - الحرب الروسية الأوكرانية</span>
+                        <h3 class="timeline-title">فيديو زيلينسكي المزيف</h3>
+                        <p class="timeline-desc">
+                            تم تداول فيديو للرئيس الأوكراني يأمر الجنود بالاستسلام.
+                            <strong>الهدف:</strong> زعزعة الثقة في القيادة وإضعاف الروح المعنوية.
+                        </p>
+                    </div>
+
+                    <div class="timeline-item">
+                        <span class="timeline-date">2020 - الإمارات العربية المتحدة</span>
+                        <h3 class="timeline-title">احتيال بنكي باستخدام الصوت المزيف</h3>
+                        <p class="timeline-desc">
+                            محتالون استخدموا صوتاً مزيفاً لمدير شركة كبرى، وطلبوا تحويل ملايين الدراهم.
+                            <strong>الخسارة:</strong> خسائر فادحة قبل اكتشاف الخدعة.
+                        </p>
+                    </div>
+
+                    <div class="timeline-item">
+                        <span class="timeline-date">2023 - الهند</span>
+                        <h3 class="timeline-title">تشويه سمعة سياسيات</h3>
+                        <p class="timeline-desc">
+                            تداول فيديوهات مزيفة لسياسيات وهن يرتدين ملابس غير محتشمة.
+                            <strong>الهدف:</strong> منعهن من المنافسة في الانتخابات.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-card fade-in-up delay-2">
+                    <div class="example-label">درس أمني</div>
+                    <div class="example-title">
+                        <i class="fas fa-lightbulb"></i>
+                        الاستنتاجات الرئيسية
+                    </div>
+                    <div class="example-content">
+                        <ol style="padding-right: 1.5rem; margin-top: 1rem;">
+                            <li>التزييف العميق لم يعد مجرد نظرية، بل أصبح سلاحاً فعالاً</li>
+                            <li>الهدف ليس فقط المال، بل التلاعب بالرأي العام والسياسة</li>
+                            <li>الجميع عرضة: أفراد، شركات، حكومات</li>
+                            <li>سرعة انتشار المحتوى المزيف تفوق سرعة الحقيقة</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 4: How to Detect -->
+        <section class="slide" data-slide="4">
+            <div class="slide-container">
+                <div class="section-header">
+                    <span class="section-number">الجزء الرابع</span>
+                    <h2 class="section-title">كيف نكتشف التزييف؟</h2>
+                    <p class="section-subtitle">أدوات وتقنيات للتمييز بين الحقيقي والمزيف</p>
+                </div>
+
+                <div class="detection-grid fade-in-up delay-1">
+                    <div class="detection-card">
+                        <div class="detection-icon">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <h3 class="detection-title">الفحص البصري</h3>
+                        <p class="detection-desc">
+                            ابحث عن: عدم تناسق الإضاءة، رمش العين غير الطبيعي، 
+                            حدود الوجه المشوشة، حركة الشفاه غير المتزامنة مع الصوت.
+                        </p>
+                    </div>
+                    <div class="detection-card">
+                        <div class="detection-icon">
+                            <i class="fas fa-wave-square"></i>
+                        </div>
+                        <h3 class="detection-title">التحليل الصوتي</h3>
+                        <p class="detection-desc">
+                            الأصوات المزيفة غالباً: نبرة مسطحة، توقفات غير طبيعية، 
+                            عدم وجود مشاعر حقيقية، ترددات غير متوافقة.
+                        </p>
+                    </div>
+                    <div class="detection-card">
+                        <div class="detection-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h3 class="detection-title">أدوات الذكاء الاصطناعي</h3>
+                        <p class="detection-desc">
+                            برامج مثل: Microsoft Video Authenticator, 
+                            Deepware Scanner, Sensity AI.
+                        </p>
+                    </div>
+                    <div class="detection-card">
+                        <div class="detection-icon">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <h3 class="detection-title">التحقق البشري</h3>
+                        <p class="detection-desc">
+                            استشر خبراء: محللي الفيديو، مختصي الأمن السيبراني، 
+                            فريق العلاقات العامة.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-card fade-in-up delay-2" style="margin-top: 3rem;">
+                    <div class="example-label">نقاط فحص سريعة</div>
+                    <div class="example-title">
+                        <i class="fas fa-clipboard-check"></i>
+                        قائمة فحص سريعة
+                    </div>
+                    <div class="example-content">
+                        <ul style="padding-right: 1.5rem; margin-top: 1rem;">
+                            <li><strong>هل الإضاءة متناسقة؟</strong> ظلال الوجه تتناسب مع الخلفية؟</li>
+                            <li><strong>هل يرمش الشخص بشكل طبيعي؟</strong> لا يرمش كثيراً أو قليلاً؟</li>
+                            <li><strong>هل الصوت متزامن مع حركة الشفاه؟</strong></li>
+                            <li><strong>هل المصدر موثوق؟</strong> من نشر الفيديو أولاً؟</li>
+                            <li><strong>هل هناك نسخ أصلية؟</strong> مقارنة مع فيديوهات حقيقية للشخص</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 5: Protection -->
+        <section class="slide" data-slide="5">
+            <div class="slide-container">
+                <div class="section-header">
+                    <span class="section-number">الجزء الخامس</span>
+                    <h2 class="section-title">الحماية والوقاية</h2>
+                    <p class="section-subtitle">استراتيجيات للدفاع على جميع المستويات</p>
+                </div>
+
+                <div class="protection-tabs fade-in-up delay-1">
+                    <button class="tab-btn active" onclick="openTab('individual')">
+                        <i class="fas fa-user"></i> مستوى الفرد
+                    </button>
+                    <button class="tab-btn" onclick="openTab('organization')">
+                        <i class="fas fa-building"></i> مستوى المؤسسة
+                    </button>
+                    <button class="tab-btn" onclick="openTab('national')">
+                        <i class="fas fa-flag"></i> مستوى الدولة
+                    </button>
+                </div>
+
+                <div id="individual" class="tab-content active">
+                    <ul class="protection-list">
+                        <li class="protection-item fade-in-up delay-1">
+                            <div class="protection-num">1</div>
+                            <div class="protection-content">
+                                <h4>التشكك دائمًا</h4>
+                                <p>لا تثق تلقائياً في أي محتوى صادم أو غير متوقع. ابحث عن المصدر الأصلي وتأكد من مصداقيته.</p>
+                            </div>
+                        </li>
+                        <li class="protection-item fade-in-up delay-2">
+                            <div class="protection-num">2</div>
+                            <div class="protection-content">
+                                <h4>حماية بياناتك الشخصية</h4>
+                                <p>قلّل نشر صورك وفيديوهاتك على وسائل التواصل. استخدم إعدادات الخصوصية القصوى.</p>
+                            </div>
+                        </li>
+                        <li class="protection-item fade-in-up delay-3">
+                            <div class="protection-num">3</div>
+                            <div class="protection-content">
+                                <h4>التوعية العائلية</h4>
+                                <p>علم أبناءك وأهلك أن ليس كل ما يرونه على الإنترنت حقيقي. درّبهم على التحقق.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div id="organization" class="tab-content">
+                    <ul class="protection-list">
+                        <li class="protection-item fade-in-up delay-1">
+                            <div class="protection-num">1</div>
+                            <div class="protection-content">
+                                <h4>سياسات أمنية صارمة</h4>
+                                <p>عدم تنفيذ تحويلات مالية بناءً على مكالمة صوتية فقط. استخدام كلمات سر مشتركة للتحقق.</p>
+                            </div>
+                        </li>
+                        <li class="protection-item fade-in-up delay-2">
+                            <div class="protection-num">2</div>
+                            <div class="protection-content">
+                                <h4>تدريب الموظفين</h4>
+                                <p>ورش عمل دورية عن التزييف العميق. محاكاة هجمات تدريبية لاختبار اليقظة.</p>
+                            </div>
+                        </li>
+                        <li class="protection-item fade-in-up delay-3">
+                            <div class="protection-num">3</div>
+                            <div class="protection-content">
+                                <h4>نظم التحقق المتقدمة</h4>
+                                <p>استخدام التوثيق الثنائي للمعاملات الحساسة. أنظمة تحليل الصوت والفيديو للكشف عن التزوير.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div id="national" class="tab-content">
+                    <ul class="protection-list">
+                        <li class="protection-item fade-in-up delay-1">
+                            <div class="protection-num">1</div>
+                            <div class="protection-content">
+                                <h4>قوانين رادعة</h4>
+                                <p>تشريعات تجرّم إنشاء واستخدام التزييف العميق لأغراض ضارة. عقوبات صارمة للمخالفين.</p>
+                            </div>
+                        </li>
+                        <li class="protection-item fade-in-up delay-2">
+                            <div class="protection-num">2</div>
+                            <div class="protection-content">
+                                <h4>منصات مراقبة وطنية</h4>
+                                <p>فرق مختصة لرصد المحتوى المزيف الخطير. تعاون مع منصات التواصل للحد من الانتشار.</p>
+                            </div>
+                        </li>
+                        <li class="protection-item fade-in-up delay-3">
+                            <div class="protection-num">3</div>
+                            <div class="protection-content">
+                                <h4>التعاون الدولي</h4>
+                                <p>تبادل المعلومات والخبرات مع الدول الأخرى. اتفاقيات لمكافحة التزييف العميق عبر الحدود.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="tools-grid fade-in-up delay-4" style="margin-top: 3rem;">
+                    <div class="tool-card">
+                        <div class="tool-icon"><i class="fas fa-shield-alt"></i></div>
+                        <div class="tool-name">Microsoft Video Authenticator</div>
+                        <div class="tool-desc">أداة مجانية للكشف عن فيديوهات Deep Fake</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-icon"><i class="fas fa-search"></i></div>
+                        <div class="tool-name">Reverse Image Search</div>
+                        <div class="tool-desc">البحث العكسي عن الصور للتحقق من أصالتها</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-icon"><i class="fas fa-graduation-cap"></i></div>
+                        <div class="tool-name">دورات توعوية</div>
+                        <div class="tool-desc">دورات أونلاين مجانية عن الأمن السيبراني</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 6: Conclusion -->
+        <section class="slide" data-slide="6">
+            <div class="slide-container">
+                <div class="section-header">
+                    <span class="section-number">الجزء الأخير</span>
+                    <h2 class="section-title">الخاتمة</h2>
+                    <p class="section-subtitle">رسالتنا للأمن السيبراني في عصر الذكاء الاصطناعي</p>
+                </div>
+
+                <div class="conclusion-card fade-in-up delay-1">
+                    <div class="quote">
+                        "في عصر الذكاء الاصطناعي، الشك الصحّي والتحقق ليسا خياراً، بل ضرورة أمنية. التزييف العميق ليس مجرد تقنية، بل تحوّل في مفهوم الحقيقة نفسها."
+                    </div>
+                </div>
+
+                <div class="cards-grid" style="margin-top: 3rem;">
+                    <div class="card fade-in-up delay-2">
+                        <div class="card-icon"><i class="fas fa-brain"></i></div>
+                        <h3 class="card-title">التحدي</h3>
+                        <p class="card-text">
+                            كلما تطورت تقنيات الكشف، تطورت تقنيات التزييف. إنها سباق دائم بين الخير والشر.
+                        </p>
+                    </div>
+                    <div class="card fade-in-up delay-3">
+                        <div class="card-icon blue"><i class="fas fa-hands-helping"></i></div>
+                        <h3 class="card-title">الحل</h3>
+                        <p class="card-text">
+                            التعاون بين: الأفراد، المؤسسات، الحكومات، منصات التواصل، والباحثين.
+                        </p>
+                    </div>
+                    <div class="card fade-in-up delay-4">
+                        <div class="card-icon green"><i class="fas fa-seedling"></i></div>
+                        <h3 class="card-title">المستقبل</h3>
+                        <p class="card-text">
+                            مع التطور السريع، يجب أن نكون مستعدين لمواجهات أكثر تعقيداً في السنوات القادمة.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-card fade-in-up delay-5" style="margin-top: 3rem;">
+                    <div class="example-label">دعوة للعمل</div>
+                    <div class="example-title">
+                        <i class="fas fa-bullhorn"></i>
+                        ماذا يمكنك أن تفعل اليوم؟
+                    </div>
+                    <div class="example-content">
+                        <ol style="padding-right: 1.5rem; margin-top: 1rem;">
+                            <li><strong>شارك هذه المعلومات</strong> مع 3 أشخاص على الأقل</li>
+                            <li><strong>طبّق نصائح الحماية</strong> في عملك وحياتك الشخصية</li>
+                            <li><strong>دعّم مبادرات التوعية</strong> بالأمن السيبراني</li>
+                            <li><strong>ابلغ عن المحتوى المزيف</strong> عندما تراه</li>
+                            <li><strong>كن ناقداً ذكياً</strong> للمحتوى الذي تستهلكه</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 3rem;" class="fade-in-up delay-5">
+                    <button class="start-btn" onclick="goToSlide(0)">
+                        <i class="fas fa-redo"></i>
+                        <span>إعادة العرض من البداية</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Navigation Arrows -->
+    <div class="nav-arrows">
+        <button class="arrow-btn" onclick="prevSlide()" id="prevBtn" aria-label="الشريحة السابقة">
+            <i class="fas fa-arrow-right"></i>
+        </button>
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">7</span>
+        </div>
+        <button class="arrow-btn" onclick="nextSlide()" id="nextBtn" aria-label="الشريحة التالية">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+    </div>
+
+    <!-- Footer with Credits -->
+    <div class="credits-footer">
+        <div class="footer-left">
+            <div class="author-item">
+                <i class="fas fa-user author-icon"></i>
+                <div>
+                    <div class="author-name">سالم الحالمي</div>
+                    <div class="author-title">مقدم العرض</div>
+                </div>
+            </div>
+            <div class="author-item">
+                <i class="fas fa-user-graduate author-icon"></i>
+                <div>
+                    <div class="author-name">الأستاذة أسماء محمد</div>
+                    <div class="author-title">مشرفة العرض</div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-right">
+            <i class="fas fa-shield-alt footer-icon"></i>
+            <span>ندوة الأمن السيبراني - التزييف العميق 2024</span>
+        </div>
+    </div>
+
+    <script>
+        // Slide Management
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const progressBar = document.getElementById('progressBar');
+        const currentSlideEl = document.getElementById('currentSlide');
+        const totalSlidesEl = document.getElementById('totalSlides');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        function updateSlideCounter() {
+            currentSlideEl.textContent = currentSlide + 1;
+            totalSlidesEl.textContent = totalSlides;
+        }
+
+        function updateProgressBar() {
+            const progress = ((currentSlide + 1) / totalSlides) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+
+        function updateButtons() {
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === totalSlides - 1;
+        }
+
+        function updateMenu() {
+            document.querySelectorAll('.menu-item').forEach((item, index) => {
+                if (index === currentSlide) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
+        function goToSlide(slideIndex) {
+            if (slideIndex < 0 || slideIndex >= totalSlides) return;
+            
+            slides[currentSlide].classList.remove('active');
+            currentSlide = slideIndex;
+            slides[currentSlide].classList.add('active');
+            
+            updateProgressBar();
+            updateSlideCounter();
+            updateButtons();
+            updateMenu();
+            toggleSidebar(); // Close sidebar on slide change
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                goToSlide(currentSlide + 1);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                goToSlide(currentSlide - 1);
+            }
+        }
+
+        // Keyboard Navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                prevSlide();
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                nextSlide();
+            } else if (e.key >= '0' && e.key <= '6') {
+                goToSlide(parseInt(e.key));
+            }
+        });
+
+        // Theme Toggle
+        function toggleTheme() {
+            document.body.classList.toggle('light');
+            const themeBtn = document.querySelector('.nav-btn:nth-child(1)');
+            const icon = themeBtn.querySelector('i');
+            if (document.body.classList.contains('light')) {
+                icon.className = 'fas fa-sun';
+            } else {
+                icon.className = 'fas fa-moon';
+            }
+        }
+
+        // Sidebar Toggle
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        // Tab Management
+        function openTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show current tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to current tab button
+            event.currentTarget.classList.add('active');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            updateSlideCounter();
+            updateProgressBar();
+            updateButtons();
+            updateMenu();
+            
+            // Add animation classes after load
+            setTimeout(() => {
+                document.querySelectorAll('.fade-in-up').forEach(el => {
+                    el.style.animationPlayState = 'running';
+                });
+            }, 100);
+        });
+
+        // Touch/Swipe support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchEndX - touchStartX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    prevSlide(); // Swipe right
+                } else {
+                    nextSlide(); // Swipe left
+                }
+            }
+        }
+    </script>
+</body>
+</html>
