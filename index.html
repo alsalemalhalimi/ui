@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مخاطر التزييف العميق | Deep Fake - عرض الأمن السيبراني</title>
+    <title>التزييف العميق (Deep Fake) - دليل المبتدئين</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -163,65 +163,9 @@
             box-shadow: 0 0 20px var(--accent-glow);
         }
 
-        /* Author Info Bar - Fixed at Top */
-        .author-bar {
-            position: fixed;
-            top: 70px;
-            left: 0;
-            right: 0;
-            background: rgba(30, 41, 59, 0.9);
-            backdrop-filter: blur(10px);
-            padding: 0.5rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 998;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            font-size: 0.9rem;
-        }
-
-        .author-info {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .author-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .author-icon {
-            color: var(--cyber-blue);
-        }
-
-        .author-name {
-            font-weight: 600;
-            color: var(--text);
-        }
-
-        .author-title {
-            color: var(--text-muted);
-            font-size: 0.85rem;
-        }
-
-        .supervisor-info {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.25rem 0.75rem;
-            background: rgba(139, 92, 246, 0.2);
-            border-radius: 20px;
-            border: 1px solid rgba(139, 92, 246, 0.3);
-        }
-
-        .supervisor-icon {
-            color: var(--cyber-purple);
-        }
-
         /* Main Content */
         .presentation {
-            padding-top: 120px; /* Adjusted for author bar */
+            padding-top: 80px;
             min-height: 100vh;
         }
 
@@ -259,7 +203,7 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            min-height: calc(100vh - 170px);
+            min-height: calc(100vh - 120px);
         }
 
         .glitch-container {
@@ -471,77 +415,6 @@
             border-right: 4px solid var(--accent);
         }
 
-        /* Threat Cards */
-        .threat-section {
-            margin: 3rem 0;
-        }
-
-        .threat-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .threat-icon {
-            width: 50px;
-            height: 50px;
-            background: var(--gradient-1);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-        }
-
-        .threat-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .threat-list {
-            list-style: none;
-        }
-
-        .threat-item {
-            background: rgba(30, 41, 59, 0.5);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 15px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            display: flex;
-            gap: 1rem;
-            transition: all 0.3s;
-        }
-
-        .threat-item:hover {
-            border-color: var(--cyber-blue);
-            transform: translateX(-5px);
-        }
-
-        .threat-item-icon {
-            width: 40px;
-            height: 40px;
-            background: rgba(6, 182, 212, 0.2);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--cyber-blue);
-            flex-shrink: 0;
-        }
-
-        .threat-item-content h4 {
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .threat-item-content p {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
         /* Demo Scene */
         .demo-scene {
             background: rgba(30, 41, 59, 0.7);
@@ -667,52 +540,45 @@
             min-width: 280px;
         }
 
-        .demo-chat {
-            background: rgba(15, 23, 42, 0.8);
-            border-radius: 15px;
-            padding: 1.5rem;
+        /* Steps Visualization */
+        .steps-container {
+            position: relative;
+            padding: 2rem 0;
         }
 
-        .chat-message {
+        .step {
             display: flex;
-            gap: 1rem;
-            margin-bottom: 1rem;
-            animation: chatIn 0.5s ease;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            background: rgba(30, 41, 59, 0.5);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        @keyframes chatIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .chat-avatar {
-            width: 40px;
-            height: 40px;
+        .step-number {
+            width: 60px;
+            height: 60px;
             background: var(--gradient-1);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
             flex-shrink: 0;
         }
 
-        .chat-bubble {
-            background: rgba(255,255,255,0.1);
-            padding: 1rem;
-            border-radius: 15px 15px 15px 0;
-            max-width: 80%;
+        .step-content h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
         }
 
-        .chat-bubble.fake {
-            background: rgba(239, 68, 68, 0.2);
-            border: 1px solid var(--accent);
-        }
-
-        .chat-name {
-            font-weight: 600;
-            font-size: 0.85rem;
-            margin-bottom: 0.25rem;
-            color: var(--cyber-blue);
+        .step-content p {
+            color: var(--text-muted);
+            line-height: 1.8;
         }
 
         /* Detection Cards */
@@ -846,142 +712,13 @@
             line-height: 1.6;
         }
 
-        /* Timeline */
-        .timeline {
-            position: relative;
-            padding-right: 30px;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            right: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: var(--gradient-1);
-            border-radius: 2px;
-        }
-
-        .timeline-item {
-            position: relative;
-            padding: 1.5rem;
-            padding-right: 3rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            right: -8px;
-            top: 1.5rem;
-            width: 20px;
-            height: 20px;
-            background: var(--accent);
-            border-radius: 50%;
-            border: 4px solid var(--primary);
-        }
-
-        .timeline-date {
-            display: inline-block;
-            background: rgba(239, 68, 68, 0.2);
-            color: var(--accent);
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-        }
-
-        .timeline-title {
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .timeline-desc {
-            color: var(--text-muted);
-            line-height: 1.6;
-        }
-
-        /* Conclusion */
-        .conclusion-card {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(6, 182, 212, 0.2) 100%);
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            border-radius: 30px;
-            padding: 3rem;
-            text-align: center;
-        }
-
-        .quote {
-            font-size: clamp(1.3rem, 3vw, 1.8rem);
-            font-weight: 700;
-            line-height: 1.8;
-            position: relative;
-            padding: 2rem;
-        }
-
-        .quote::before {
-            content: '"';
-            position: absolute;
-            top: -20px;
-            right: 20px;
-            font-size: 6rem;
-            color: var(--cyber-purple);
-            opacity: 0.3;
-        }
-
-        /* Navigation Arrows */
-        .nav-arrows {
-            position: fixed;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 1rem;
-            z-index: 100;
-        }
-
-        .arrow-btn {
-            width: 50px;
-            height: 50px;
-            background: rgba(30, 41, 59, 0.9);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            color: var(--text);
-        }
-
-        .arrow-btn:hover:not(:disabled) {
-            background: var(--gradient-1);
-            border-color: transparent;
-            transform: scale(1.1);
-        }
-
-        .arrow-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .slide-counter {
-            background: rgba(30, 41, 59, 0.9);
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-        }
-
-        /* Sidebar Menu - FIXED */
+        /* Sidebar Menu */
         .sidebar {
             position: fixed;
-            top: 120px; /* Adjusted for author bar */
+            top: 80px;
             right: -320px;
             width: 320px;
-            height: calc(100vh - 120px - 60px); /* Adjusted for footer */
+            height: calc(100vh - 80px - 60px);
             background: rgba(15, 23, 42, 0.98);
             backdrop-filter: blur(20px);
             border-left: 1px solid rgba(255,255,255,0.1);
@@ -1035,206 +772,49 @@
             font-weight: 600;
         }
 
-        /* Tools Section */
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        /* Navigation Arrows */
+        .nav-arrows {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
             gap: 1rem;
-            margin-top: 1.5rem;
+            z-index: 100;
         }
 
-        .tool-card {
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            border-radius: 15px;
-            padding: 1.5rem;
-            text-align: center;
-            transition: all 0.3s;
-        }
-
-        .tool-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2);
-        }
-
-        .tool-icon {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            color: var(--success);
-        }
-
-        .tool-name {
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .tool-desc {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        /* Animation Classes */
-        .fade-in-up {
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 0.6s ease forwards;
-        }
-
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .delay-1 { animation-delay: 0.1s; }
-        .delay-2 { animation-delay: 0.2s; }
-        .delay-3 { animation-delay: 0.3s; }
-        .delay-4 { animation-delay: 0.4s; }
-        .delay-5 { animation-delay: 0.5s; }
-
-        /* Stats Section */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem 0;
-        }
-
-        .stat-card {
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
-            border: 1px solid rgba(239, 68, 68, 0.2);
-            border-radius: 20px;
-            padding: 2rem;
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 3rem;
-            font-weight: 800;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .stat-label {
-            color: var(--text-muted);
-            margin-top: 0.5rem;
-        }
-
-        /* Video Scene Animation */
-        .scene-container {
-            background: rgba(30, 41, 59, 0.7);
-            border-radius: 20px;
-            padding: 2rem;
-            margin: 2rem 0;
-            overflow: hidden;
-        }
-
-        .scene-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .scene-title {
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .live-badge {
-            background: var(--accent);
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            animation: livePulse 1s infinite;
-        }
-
-        @keyframes livePulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.6; }
-        }
-
-        .scene-video {
-            position: relative;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            border-radius: 15px;
-            height: 250px;
+        .arrow-btn {
+            width: 50px;
+            height: 50px;
+            background: rgba(30, 41, 59, 0.9);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--text);
         }
 
-        .scan-line {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: var(--cyber-blue);
-            animation: scanLine 2s linear infinite;
-            box-shadow: 0 0 20px var(--cyber-blue);
+        .arrow-btn:hover:not(:disabled) {
+            background: var(--gradient-1);
+            border-color: transparent;
+            transform: scale(1.1);
         }
 
-        @keyframes scanLine {
-            0% { top: 0; }
-            100% { top: 100%; }
+        .arrow-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
-        .face-scan {
-            width: 120px;
-            height: 150px;
-            border: 3px solid var(--cyber-blue);
-            border-radius: 60px 60px 40px 40px;
-            position: relative;
-            animation: faceScan 3s ease-in-out infinite;
-        }
-
-        @keyframes faceScan {
-            0%, 100% { border-color: var(--cyber-blue); box-shadow: 0 0 20px rgba(6, 182, 212, 0.5); }
-            50% { border-color: var(--accent); box-shadow: 0 0 20px var(--accent-glow); }
-        }
-
-        .face-features {
-            position: absolute;
-            top: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .feature-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--cyber-blue);
-            border-radius: 50%;
-            margin: 15px 0;
-            animation: dotPulse 1s infinite;
-        }
-
-        @keyframes dotPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.5); }
-        }
-
-        .warning-overlay {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(239, 68, 68, 0.9);
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 10px;
-            font-weight: 700;
+        .slide-counter {
+            background: rgba(30, 41, 59, 0.9);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
         }
 
         /* Footer with Credits */
@@ -1273,6 +853,26 @@
             margin-left: 0.25rem;
         }
 
+        /* Animation Classes */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+
         /* Responsive */
         @media (max-width: 768px) {
             .nav {
@@ -1292,14 +892,14 @@
             }
 
             .nav-arrows {
-                bottom: 4rem; /* Adjusted for footer and spacing */
+                bottom: 4rem;
             }
 
             .sidebar {
                 width: 100%;
                 right: -100%;
-                top: 120px;
-                height: calc(100vh - 120px - 80px); /* Adjusted for mobile footer */
+                top: 70px;
+                height: calc(100vh - 70px - 80px);
             }
 
             .protection-tabs {
@@ -1308,18 +908,6 @@
 
             .tab-btn {
                 width: 100%;
-                justify-content: center;
-            }
-
-            .author-bar {
-                flex-direction: column;
-                gap: 0.5rem;
-                padding: 0.5rem 1rem;
-                top: 60px;
-            }
-
-            .author-info {
-                gap: 1rem;
                 justify-content: center;
             }
 
@@ -1337,7 +925,7 @@
             }
 
             .presentation {
-                padding-top: 150px; /* Adjusted for responsive author bar */
+                padding-top: 70px;
             }
 
             .menu-item {
@@ -1347,6 +935,12 @@
 
             .sidebar {
                 padding: 1rem;
+            }
+
+            .step {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
             }
         }
 
@@ -1373,14 +967,14 @@
         .light .threat-item,
         .light .protection-item,
         .light .detection-card,
-        .light .demo-scene {
+        .light .demo-scene,
+        .light .step {
             background: rgba(255, 255, 255, 0.8);
             border-color: rgba(0,0,0,0.1);
         }
 
         .light .nav,
         .light .sidebar,
-        .light .author-bar,
         .light .credits-footer {
             background: rgba(248, 250, 252, 0.95);
         }
@@ -1394,11 +988,6 @@
         .light .demo-chat,
         .light .fake-video {
             background: rgba(0,0,0,0.05);
-        }
-
-        .light .supervisor-info {
-            background: rgba(139, 92, 246, 0.1);
-            border-color: rgba(139, 92, 246, 0.2);
         }
 
         .light .sidebar {
@@ -1425,7 +1014,7 @@
     <nav class="nav">
         <div class="logo">
             <div class="logo-icon"><i class="fas fa-shield-virus"></i></div>
-            <span class="logo-text">ندوة الأمن السيبراني</span>
+            <span class="logo-text">التزييف العميق - دليل المبتدئين</span>
         </div>
         <div class="nav-controls">
             <button class="nav-btn" onclick="toggleTheme()" aria-label="تبديل المظهر">
@@ -1436,27 +1025,6 @@
             </button>
         </div>
     </nav>
-
-    <!-- Author Info Bar - Fixed at Top -->
-    <div class="author-bar">
-        <div class="author-info">
-            <div class="author-item">
-                <i class="fas fa-user author-icon"></i>
-
-            </div>
-            <div class="supervisor-info">
-                <i class="fas fa-user-graduate supervisor-icon"></i>
-                <div>
-                    <div class="author-name">الأستاذة أسماء محمد</div>
-                    <div class="author-title">الاشراف  </div>
-                </div>
-            </div>
-        </div>
-        <div class="event-date">
-            <i class="far fa-calendar-alt" style="color: var(--text-muted); margin-left: 0.5rem;"></i>
-            <span style="color: var(--text-muted);">ندوة الأمن السيبراني 2026</span>
-        </div>
-    </div>
 
     <!-- Progress Bar -->
     <div class="progress-container">
@@ -1479,23 +1047,15 @@
         </div>
         <div class="menu-item" onclick="goToSlide(2)">
             <span class="menu-num">2</span>
-            <span>التهديدات السيبرانية</span>
+            <span>كيف يتم عمل التزييف العميق؟</span>
         </div>
         <div class="menu-item" onclick="goToSlide(3)">
             <span class="menu-num">3</span>
-            <span>أمثلة حية</span>
+            <span>كيف نكتشف التزييف العميق؟</span>
         </div>
         <div class="menu-item" onclick="goToSlide(4)">
             <span class="menu-num">4</span>
-            <span>كيف نكتشف التزييف؟</span>
-        </div>
-        <div class="menu-item" onclick="goToSlide(5)">
-            <span class="menu-num">5</span>
-            <span>الحماية والوقاية</span>
-        </div>
-        <div class="menu-item" onclick="goToSlide(6)">
-            <span class="menu-num">6</span>
-            <span>الخاتمة</span>
+            <span>كيف نتعامل معه ونحمي أنفسنا؟</span>
         </div>
     </div>
 
@@ -1507,30 +1067,42 @@
                 <div class="glitch-container">
                     <h1 class="main-title">التزييف العميق</h1>
                 </div>
-                <p class="subtitle">Deep Fake: التهديد الخفي للأمن السيبراني</p>
+                <p class="subtitle">اشراف/اسماء محمد</p>
                 
                 <div class="warning-badge">
                     <i class="fas fa-exclamation-triangle"></i>
-                    <span>عرض توعوي - ندوة الأمن السيبراني</span>
+                    <span> !!!..لا تصدق كلما تسمع ولا تصدق ايضا كلما ترئ </span>
                 </div>
 
-                <div class="stats-grid">
-                    <div class="stat-card fade-in-up delay-1">
-                        <div class="stat-number">400%</div>
-                        <div class="stat-label">زيادة في فيديوهات التزييف 2023</div>
+                <div class="cards-grid">
+                    <div class="card fade-in-up delay-1">
+                        <div class="card-icon"><i class="fas fa-brain"></i></div>
+                        <h3 class="card-title">ماذا ستتعلم؟</h3>
+                        <p class="card-text">
+                            فهم ماهية التزييف العميق، وكيف يعمل، وكيف يمكنك اكتشافه، 
+                            والأهم: كيف تحمي نفسك وعائلتك منه.
+                        </p>
                     </div>
-                    <div class="stat-card fade-in-up delay-2">
-                        <div class="stat-number">$25M</div>
-                        <div class="stat-label">خسائر الاحتيال الصوتي سنوياً</div>
+                    <div class="card fade-in-up delay-2">
+                        <div class="card-icon blue"><i class="fas fa-exclamation-circle"></i></div>
+                        <h3 class="card-title">لماذا يهمك؟</h3>
+                        <p class="card-text">
+                            لأنك قد تكون ضحية للتزييف العميق دون أن تدري! يمكن استخدامه 
+                            للاحتيال، التشهير، أو التلاعب بآرائك.
+                        </p>
                     </div>
-                    <div class="stat-card fade-in-up delay-3">
-                        <div class="stat-number">96%</div>
-                        <div class="stat-label">لا يستطيعون التمييز بين الحقيقي والمزيف</div>
+                    <div class="card fade-in-up delay-3">
+                        <div class="card-icon green"><i class="fas fa-shield-alt"></i></div>
+                        <h3 class="card-title">كيف نحمي أنفسنا؟</h3>
+                        <p class="card-text">
+                            سنتعلم معاً طرق بسيطة وفعالة للتعامل مع هذا الخطر 
+                            والبقاء آمنين في العالم الرقمي.
+                        </p>
                     </div>
                 </div>
 
                 <button class="start-btn" onclick="nextSlide()">
-                    <span>ابدأ العرض التقديمي</span>
+                    <span>ابدأ الرحلة</span>
                     <i class="fas fa-arrow-left"></i>
                 </button>
             </div>
@@ -1540,485 +1112,418 @@
         <section class="slide" data-slide="1">
             <div class="slide-container">
                 <div class="section-header">
-                    <span class="section-number">الجزء الأول</span>
+                    <span class="section-number">التبويب الأول</span>
                     <h2 class="section-title">ما هو التزييف العميق؟</h2>
-                    <p class="section-subtitle">فهم التقنية التي تُنشئ واقعاً مُزيفاً</p>
+                    <p class="section-subtitle">فهم الأساسيات بلغة بسيطة</p>
                 </div>
 
-                <div class="cards-grid">
-                    <div class="card fade-in-up delay-1">
-                        <div class="card-icon"><i class="fas fa-brain"></i></div>
-                        <h3 class="card-title">التعريف البسيط</h3>
-                        <p class="card-text">
-                            تقنية تستخدم الذكاء الاصطناعي لإنشاء فيديوهات وصور وأصوات مزيفة 
-                            تبدو حقيقية بنسبة 100%. تعتمد على الشبكات العصبية العميقة لتعلم 
-                            ملامح الوجه والصوت.
-                        </p>
+                <div class="card fade-in-up delay-1">
+                    <div class="card-icon"><i class="fas fa-question-circle"></i></div>
+                    <h3 class="card-title">تعريف مبسط</h3>
+                    <p class="card-text">
+                        <strong>التزييف العميق</strong> هو استخدام الذكاء الاصطناعي لإنشاء 
+                        فيديوهات أو صور أو أصوات مزيفة تبدو <strong>حقيقية تماماً</strong>. 
+                        تخيل لو استطاع أحدهم أن يجعل أي شخص يقول أو يفعل ما يريده في فيديو!
+                    </p>
+                </div>
+
+                <div class="example-card fade-in-up delay-2">
+                    <div class="example-label">أمثلة واقعية</div>
+                    
+                    <div class="example-title">
+                        <i class="fas fa-video"></i>
+                        مثال 1: فيديوهات المشاهير
                     </div>
-                    <div class="card fade-in-up delay-2">
-                        <div class="card-icon blue"><i class="fas fa-video"></i></div>
-                        <h3 class="card-title">كيف تعمل؟</h3>
-                        <p class="card-text">
-                            تقوم الخوارزميات بتحليل آلاف الصور والفيديوهات للشخص المستهدف، 
-                            ثم تُنشئ نموذجاً رقمياً يُمكن التحكم به لإنتاج محتوى جديد لم يحدث أبداً.
-                        </p>
+                    <div class="example-content">
+                        <p>فيديوهات لمشاهير وهم يقولون أشياء لم يقولوها أبداً:</p>
+                        <ul style="padding-right: 1.5rem; margin-top: 0.5rem;">
+                            <li>فيديو مزيف للرئيس الأمريكي يعلن الحرب</li>
+                            <li>ممثل شهير يروج لمنتج لم يعلن عنه</li>
+                            <li>مطرب يغني أغنية لم يغنيها</li>
+                        </ul>
                     </div>
-                    <div class="card fade-in-up delay-3">
-                        <div class="card-icon yellow"><i class="fas fa-clock"></i></div>
-                        <h3 class="card-title">سرعة التطور</h3>
-                        <p class="card-text">
-                            في 2017 كانت مجرد تجربة أكاديمية. اليوم، يمكن لأي شخص 
-                            إنشاء فيديو مزيف باستخدام تطبيق على الهاتف في دقائق.
-                        </p>
+
+                    <div class="example-title" style="margin-top: 1.5rem;">
+                        <i class="fas fa-phone-alt"></i>
+                        مثال 2: المكالمات الصوتية المزيفة
+                    </div>
+                    <div class="example-content">
+                        <p>مكالمات تبدو كأنها من أشخاص تعرفهم:</p>
+                        <ul style="padding-right: 1.5rem; margin-top: 0.5rem;">
+                            <li>ابنك "يتصل" بك طالباً المساعدة المالية</li>
+                            <li>مديرك "يطلب" تحويل أموال عاجل</li>
+                            <li>صديق "يستعير" منك مالاً عبر الهاتف</li>
+                        </ul>
+                    </div>
+
+                    <div class="example-title" style="margin-top: 1.5rem;">
+                        <i class="fas fa-newspaper"></i>
+                        مثال 3: أخبار كاذبة
+                    </div>
+                    <div class="example-content">
+                        <p>نشر أخبار زائفة بدعم من فيديوهات مزيفة:</p>
+                        <ul style="padding-right: 1.5rem; margin-top: 0.5rem;">
+                            <li>سياسي "يعترف" بجرائم لم يرتكبها</li>
+                            <li>شائعات عن وفاة شخصيات عامة</li>
+                            <li>أحداث كوارث "مصورة" لم تحدث</li>
+                        </ul>
+                    </div>
+
+                    <div class="example-result">
+                        <strong>النتيجة:</strong> أي شخص يمكن أن يكون هدفاً للتزييف العميق!
                     </div>
                 </div>
 
-                <!-- Scene: Obama Deep Fake -->
-                <div class="scene-container fade-in-up delay-4">
-                    <div class="scene-header">
-                        <div class="scene-title">
-                            <i class="fas fa-film"></i>
-                            مشهد تمثيلي: تجربة أوباما 2018
-                        </div>
-                        <span class="live-badge">مثال واقعي</span>
+                <div class="demo-scene fade-in-up delay-3">
+                    <div class="demo-header">
+                        <div class="demo-dot red"></div>
+                        <div class="demo-dot yellow"></div>
+                        <div class="demo-dot green"></div>
+                        <span>محاكاة فيديو مزيف</span>
                     </div>
                     <div class="demo-content">
                         <div class="demo-visual">
-                            <div class="scene-video">
-                                <div class="scan-line"></div>
-                                <div class="face-scan">
-                                    <div class="face-features">
-                                        <div class="feature-dot"></div>
-                                        <div class="feature-dot" style="animation-delay: 0.2s"></div>
-                                        <div class="feature-dot" style="animation-delay: 0.4s"></div>
+                            <div class="fake-video">
+                                <div class="video-placeholder">
+                                    <div class="face-outline">
+                                        <div class="face-eyes">
+                                            <div class="eye"></div>
+                                            <div class="eye"></div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="warning-overlay">
-                                    <i class="fas fa-exclamation-triangle"></i>
-                                    هذا الفيديو مزيف بالكامل
+                                    <div class="deepfake-label">فيديو مزيف</div>
                                 </div>
                             </div>
                         </div>
                         <div class="demo-text">
-                            <div class="example-card">
-                                <div class="example-label">الحدث: 2018</div>
-                                <div class="example-title">
-                                    <i class="fas fa-user-tie"></i>
-                                    باراك أوباما يقول كلمات مسيئة
-                                </div>
-                                <div class="example-content">
-                                    قام باحثون أمريكيون بإنشاء فيديو مزيف للرئيس أوباما 
-                                    وهو يقول كلمات بذيئة لـ **توعية الجمهور** بمخاطر هذه التقنية.
-                                </div>
-                                <div class="example-result">
-                                    <strong>النتيجة:</strong> تم خداع معظم المشاهدين.
-                                </div>
-                            </div>
+                            <h3 style="margin-bottom: 1rem;">هذا الفيديو يمكن أن يكون:</h3>
+                            <ul style="color: var(--text-muted); line-height: 1.8; padding-right: 1rem;">
+                                <li><strong>مشهور</strong> يعلن عن منتج وهمي</li>
+                                <li><strong>طبيب</strong> يروج لدواء خطير</li>
+                                <li><strong>خبير</strong> يعطي نصائح مضللة</li>
+                                <li><strong>قريبك</strong> يطلب منك مالاً</li>
+                            </ul>
+                            <p style="margin-top: 1rem; color: var(--accent); font-weight: 600;">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                كل هذا يمكن صنعه بسهولة!
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Slide 2: Cyber Threats -->
+        <!-- Slide 2: How Deep Fake Works -->
         <section class="slide" data-slide="2">
             <div class="slide-container">
                 <div class="section-header">
-                    <span class="section-number">الجزء الثاني</span>
-                    <h2 class="section-title">التهديدات السيبرانية</h2>
-                    <p class="section-subtitle">كيف يمكن اختراق الأمن باستخدام تقنية Deep Fake</p>
+                    <span class="section-number">التبويب الثاني</span>
+                    <h2 class="section-title">كيف يتم عمل التزييف العميق؟</h2>
+                    <p class="section-subtitle">الخطوات المبسطة وراء صناعة المحتوى المزيف</p>
                 </div>
 
-                <div class="threat-section fade-in-up delay-1">
-                    <div class="threat-header">
-                        <div class="threat-icon"><i class="fas fa-money-bill-wave"></i></div>
-                        <h3 class="threat-title">الاحتيال المالي الصوتي</h3>
-                    </div>
-                    
-                    <div class="demo-scene">
-                        <div class="demo-header">
-                            <div class="demo-dot red"></div>
-                            <div class="demo-dot yellow"></div>
-                            <div class="demo-dot green"></div>
-                            <span>محاكاة هجمة احتيال صوتي على شركة</span>
-                        </div>
-                        <div class="demo-content">
-                            <div class="demo-visual">
-                                <div class="fake-video">
-                                    <div class="video-placeholder">
-                                        <div class="face-outline">
-                                            <div class="face-eyes">
-                                                <div class="eye"></div>
-                                                <div class="eye"></div>
-                                            </div>
-                                        </div>
-                                        <div class="deepfake-label">Deep Fake</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="demo-text">
-                                <div class="demo-chat">
-                                    <div class="chat-message">
-                                        <div class="chat-avatar">
-                                            <i class="fas fa-user-tie"></i>
-                                        </div>
-                                        <div class="chat-bubble">
-                                            <div class="chat-name">المدير المالي (مزيف)</div>
-                                            "مرحباً، أنا في اجتماع طارئ. أرسل فوراً 200,000 دولار إلى الحساب الجديد للمورد. الأرقام في رسالتي التالية."
-                                        </div>
-                                    </div>
-                                    <div class="chat-message">
-                                        <div class="chat-avatar">
-                                            <i class="fas fa-user-cog"></i>
-                                        </div>
-                                        <div class="chat-bubble fake">
-                                            <div class="chat-name">المحاسب</div>
-                                            "تم التحويل، سيدي. الصوت واضح جداً!"
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                <div class="steps-container fade-in-up delay-1">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>جمع البيانات</h3>
+                            <p>
+                                يجمع المزيفون أكبر عدد ممكن من الصور والفيديوهات للشخص المستهدف.
+                                كلما زادت البيانات، كان المحتوى المزيف أكثر واقعية.
+                            </p>
+                            <p style="color: var(--warning); margin-top: 0.5rem;">
+                                <i class="fas fa-lightbulb"></i>
+                                هذا سبب أهمية حماية صورك على الإنترنت!
+                            </p>
                         </div>
                     </div>
-                </div>
 
-                <div class="threat-section fade-in-up delay-2">
-                    <div class="threat-header">
-                        <div class="threat-icon"><i class="fas fa-vote-yea"></i></div>
-                        <h3 class="threat-title">التأثير على الانتخابات</h3>
-                    </div>
-                    <ul class="threat-list">
-                        <li class="threat-item">
-                            <div class="threat-item-icon">
-                                <i class="fas fa-calendar-times"></i>
-                            </div>
-                            <div class="threat-item-content">
-                                <h4>نشر الفيديوهات المفبركة</h4>
-                                <p>فيديوهات لمرشحين وهم يعترفون بجرائم قبل ساعات من التصويت</p>
-                            </div>
-                        </li>
-                        <li class="threat-item">
-                            <div class="threat-item-icon">
-                                <i class="fas fa-comments"></i>
-                            </div>
-                            <div class="threat-item-content">
-                                <h4>تشويه السمعة</h4>
-                                <p>إنشاء مقاطع تظهر المرشح في مواقف غير أخلاقية أو متناقضة</p>
-                            </div>
-                        </li>
-                        <li class="threat-item">
-                            <div class="threat-item-icon">
-                                <i class="fas fa-bullhorn"></i>
-                            </div>
-                            <div class="threat-item-content">
-                                <h4>إعلانات سياسية مزيفة</h4>
-                                <p>إعلانات تدعي دعم شخصيات عامة لمرشحين لم يدعموهم</p>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- Slide 3: Real Examples -->
-        <section class="slide" data-slide="3">
-            <div class="slide-container">
-                <div class="section-header">
-                    <span class="section-number">الجزء الثالث</span>
-                    <h2 class="section-title">أمثلة حية من الواقع</h2>
-                    <p class="section-subtitle">أحداث حقيقية أثرت على أمن الدول والأفراد</p>
-                </div>
-
-                <div class="timeline fade-in-up delay-1">
-                    <div class="timeline-item">
-                        <span class="timeline-date">2022 - الحرب الروسية الأوكرانية</span>
-                        <h3 class="timeline-title">فيديو زيلينسكي المزيف</h3>
-                        <p class="timeline-desc">
-                            تم تداول فيديو للرئيس الأوكراني يأمر الجنود بالاستسلام.
-                            <strong>الهدف:</strong> زعزعة الثقة في القيادة وإضعاف الروح المعنوية.
-                        </p>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>التدريب على الذكاء الاصطناعي</h3>
+                            <p>
+                                يستخدمون برامج خاصة لتعليم الذكاء الاصطناعي كيف يبدو الشخص:
+                                تعابير وجهه، حركاته، صوته، وحتى طريقة تحدثه.
+                            </p>
+                            <p style="color: var(--warning); margin-top: 0.5rem;">
+                                <i class="fas fa-robot"></i>
+                                البرنامج يتعلم من آلاف الصور والفيديوهات!
+                            </p>
+                        </div>
                     </div>
 
-                    <div class="timeline-item">
-                        <span class="timeline-date">2020 - الإمارات العربية المتحدة</span>
-                        <h3 class="timeline-title">احتيال بنكي باستخدام الصوت المزيف</h3>
-                        <p class="timeline-desc">
-                            محتالون استخدموا صوتاً مزيفاً لمدير شركة كبرى، وطلبوا تحويل ملايين الدراهم.
-                            <strong>الخسارة:</strong> خسائر فادحة قبل اكتشاف الخدعة.
-                        </p>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>إنشاء المحتوى الجديد</h3>
+                            <p>
+                                بعد التدريب، يمكن للبرنامج إنشاء فيديوهات جديدة للشخص 
+                                وهو يقول أو يفعل أشياء لم تحدث أبداً في الواقع.
+                            </p>
+                            <p style="color: var(--warning); margin-top: 0.5rem;">
+                                <i class="fas fa-magic"></i>
+                                مثل ساحر رقمي يصنع واقعاً بديلاً!
+                            </p>
+                        </div>
                     </div>
 
-                    <div class="timeline-item">
-                        <span class="timeline-date">2023 - الهند</span>
-                        <h3 class="timeline-title">تشويه سمعة سياسيات</h3>
-                        <p class="timeline-desc">
-                            تداول فيديوهات مزيفة لسياسيات وهن يرتدين ملابس غير محتشمة.
-                            <strong>الهدف:</strong> منعهن من المنافسة في الانتخابات.
-                        </p>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3>تحسين الجودة</h3>
+                            <p>
+                                يستخدمون أدوات إضافية لجعل المحتوى يبدو أكثر واقعية:
+                                إضافة المؤثرات الصوتية، تحسين الإضاءة، وتنعيم الحواف.
+                            </p>
+                            <p style="color: var(--warning); margin-top: 0.5rem;">
+                                <i class="fas fa-tools"></i>
+                                يصبح من الصعب جداً اكتشاف التزييف!
+                            </p>
+                        </div>
                     </div>
                 </div>
 
                 <div class="example-card fade-in-up delay-2">
-                    <div class="example-label">درس أمني</div>
+                    <div class="example-label">معلومات مهمة</div>
                     <div class="example-title">
-                        <i class="fas fa-lightbulb"></i>
-                        الاستنتاجات الرئيسية
+                        <i class="fas fa-clock"></i>
+                        كم يستغرق صنع فيديو مزيف؟
                     </div>
                     <div class="example-content">
-                        <ol style="padding-right: 1.5rem; margin-top: 1rem;">
-                            <li>التزييف العميق لم يعد مجرد نظرية، بل أصبح سلاحاً فعالاً</li>
-                            <li>الهدف ليس فقط المال، بل التلاعب بالرأي العام والسياسة</li>
-                            <li>الجميع عرضة: أفراد، شركات، حكومات</li>
-                            <li>سرعة انتشار المحتوى المزيف تفوق سرعة الحقيقة</li>
-                        </ol>
+                        <table style="width: 100%; margin-top: 1rem; border-collapse: collapse;">
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                <td style="padding: 0.5rem; color: var(--text-muted);">فيديو بسيط</td>
+                                <td style="padding: 0.5rem; text-align: left; font-weight: 600;">ساعات قليلة</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                <td style="padding: 0.5rem; color: var(--text-muted);">فيديو عالي الجودة</td>
+                                <td style="padding: 0.5rem; text-align: left; font-weight: 600;">أيام</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.5rem; color: var(--text-muted);">فيديو احترافي</td>
+                                <td style="padding: 0.5rem; text-align: left; font-weight: 600;">أسابيع</td>
+                            </tr>
+                        </table>
+                        <p style="margin-top: 1rem; color: var(--accent);">
+                            <i class="fas fa-exclamation-circle"></i>
+                            اليوم، توجد تطبيقات تمكن أي شخص من صنع فيديوهات مزيفة في دقائق!
+                        </p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Slide 4: How to Detect -->
-        <section class="slide" data-slide="4">
+        <!-- Slide 3: How to Detect -->
+        <section class="slide" data-slide="3">
             <div class="slide-container">
                 <div class="section-header">
-                    <span class="section-number">الجزء الرابع</span>
-                    <h2 class="section-title">كيف نكتشف التزييف؟</h2>
-                    <p class="section-subtitle">أدوات وتقنيات للتمييز بين الحقيقي والمزيف</p>
+                    <span class="section-number">التبويب الثالث</span>
+                    <h2 class="section-title">كيف نكتشف التزييف العميق؟</h2>
+                    <p class="section-subtitle">طرق بسيطة يمكن لأي شخص استخدامها</p>
                 </div>
 
-                <div class="detection-grid fade-in-up delay-1">
-                    <div class="detection-card">
-                        <div class="detection-icon">
-                            <i class="fas fa-eye"></i>
-                        </div>
-                        <h3 class="detection-title">الفحص البصري</h3>
-                        <p class="detection-desc">
-                            ابحث عن: عدم تناسق الإضاءة، رمش العين غير الطبيعي، 
-                            حدود الوجه المشوشة، حركة الشفاه غير المتزامنة مع الصوت.
-                        </p>
+                <div class="cards-grid fade-in-up delay-1">
+                    <div class="card">
+                        <div class="card-icon"><i class="fas fa-eye"></i></div>
+                        <h3 class="card-title">الملاحظات البصرية</h3>
+                        <ul style="color: var(--text-muted); line-height: 1.8; padding-right: 1rem; margin-top: 0.5rem;">
+                            <li>حركة الشفاه غير متزامنة مع الصوت</li>
+                            <li>عدم وجود رمش العين الطبيعي</li>
+                            <li>الإضاءة غير متناسقة على الوجه</li>
+                            <li>حواف الوجه غير واضحة أو مشوشة</li>
+                        </ul>
                     </div>
-                    <div class="detection-card">
-                        <div class="detection-icon">
-                            <i class="fas fa-wave-square"></i>
-                        </div>
-                        <h3 class="detection-title">التحليل الصوتي</h3>
-                        <p class="detection-desc">
-                            الأصوات المزيفة غالباً: نبرة مسطحة، توقفات غير طبيعية، 
-                            عدم وجود مشاعر حقيقية، ترددات غير متوافقة.
-                        </p>
+                    <div class="card">
+                        <div class="card-icon blue"><i class="fas fa-ear"></i></div>
+                        <h3 class="card-title">الملاحظات الصوتية</h3>
+                        <ul style="color: var(--text-muted); line-height: 1.8; padding-right: 1rem; margin-top: 0.5rem;">
+                            <li>الصوت يبدو مسطحاً بلا مشاعر</li>
+                            <li>توقفات غير طبيعية أثناء الكلام</li>
+                            <li>الكلمات تنتهي فجأة</li>
+                            <li>لهجة مختلفة عن المعتاد</li>
+                        </ul>
                     </div>
-                    <div class="detection-card">
-                        <div class="detection-icon">
-                            <i class="fas fa-robot"></i>
-                        </div>
-                        <h3 class="detection-title">أدوات الذكاء الاصطناعي</h3>
-                        <p class="detection-desc">
-                            برامج مثل: Microsoft Video Authenticator, 
-                            Deepware Scanner, Sensity AI.
-                        </p>
-                    </div>
-                    <div class="detection-card">
-                        <div class="detection-icon">
-                            <i class="fas fa-user-check"></i>
-                        </div>
-                        <h3 class="detection-title">التحقق البشري</h3>
-                        <p class="detection-desc">
-                            استشر خبراء: محللي الفيديو، مختصي الأمن السيبراني، 
-                            فريق العلاقات العامة.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="example-card fade-in-up delay-2" style="margin-top: 3rem;">
-                    <div class="example-label">نقاط فحص سريعة</div>
-                    <div class="example-title">
-                        <i class="fas fa-clipboard-check"></i>
-                        قائمة فحص سريعة
-                    </div>
-                    <div class="example-content">
-                        <ul style="padding-right: 1.5rem; margin-top: 1rem;">
-                            <li><strong>هل الإضاءة متناسقة؟</strong> ظلال الوجه تتناسب مع الخلفية؟</li>
-                            <li><strong>هل يرمش الشخص بشكل طبيعي؟</strong> لا يرمش كثيراً أو قليلاً؟</li>
-                            <li><strong>هل الصوت متزامن مع حركة الشفاه؟</strong></li>
-                            <li><strong>هل المصدر موثوق؟</strong> من نشر الفيديو أولاً؟</li>
-                            <li><strong>هل هناك نسخ أصلية؟</strong> مقارنة مع فيديوهات حقيقية للشخص</li>
+                    <div class="card">
+                        <div class="card-icon green"><i class="fas fa-search"></i></div>
+                        <h3 class="card-title">التحقق من المصدر</h3>
+                        <ul style="color: var(--text-muted); line-height: 1.8; padding-right: 1rem; margin-top: 0.5rem;">
+                            <li>من نشر الفيديو أولاً؟</li>
+                            <li>هل المصدر موثوق ومعروف؟</li>
+                            <li>هل توجد نسخة أصلية؟</li>
+                            <li>ما رأي الشخص المعني نفسه؟</li>
                         </ul>
                     </div>
                 </div>
+
+                <div class="example-card fade-in-up delay-2">
+                    <div class="example-label">قائمة فحص سريعة</div>
+                    <div class="example-title">
+                        <i class="fas fa-clipboard-list"></i>
+                        اسأل نفسك هذه الأسئلة
+                    </div>
+                    <div class="example-content">
+                        <ol style="padding-right: 1.5rem; margin-top: 1rem; line-height: 2;">
+                            <li>هل هذا الفيديو <strong>مفاجئ جداً</strong> أو <strong>صادم</strong>؟</li>
+                            <li>هل يبدو الشخص <strong>غريباً</strong> أو <strong>مختلفاً</strong> عن المعتاد؟</li>
+                            <li>هل <strong>الجودة عالية جداً</strong> أو <strong>منخفضة جداً</strong>؟</li>
+                            <li>هل هناك <strong>أخطاء غريبة</strong> مثل عدم رمش العينين؟</li>
+                            <li>هل <strong>الصوت</strong> يبدو <strong>طبيعياً</strong>؟</li>
+                            <li>هل يمكنني <strong>التحقق</strong> من المصدر <strong>الأصلي</strong>؟</li>
+                        </ol>
+                        <div style="background: rgba(16, 185, 129, 0.2); padding: 1rem; border-radius: 10px; margin-top: 1rem; border-right: 4px solid var(--success);">
+                            <strong><i class="fas fa-lightbulb"></i> نصيحة:</strong> إذا كانت الإجابة "نعم" على معظم الأسئلة، فكن متشككاً!
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detection-grid fade-in-up delay-3" style="margin-top: 2rem;">
+                    <div class="detection-card">
+                        <div class="detection-icon">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <h3 class="detection-title">أدوات مفيدة</h3>
+                        <p class="detection-desc">
+                            <strong>البحث العكسي للصور:</strong> Google Images
+                            <br><strong>للأصوات:</strong> استخدام Voice Authenticator
+                            <br><strong>للفيديوهات:</strong> Deepware Scanner
+                        </p>
+                    </div>
+                    <div class="detection-card">
+                        <div class="detection-icon">
+                            <i class="fas fa-user-friends"></i>
+                        </div>
+                        <h3 class="detection-title">طلب المساعدة</h3>
+                        <p class="detection-desc">
+                            <strong>اسأل الآخرين:</strong> هل يبدو هذا طبيعياً؟
+                            <br><strong>استشر مختصاً:</strong> في الشك اتصل بخبير
+                            <br><strong>تحقق رسمياً:</strong> من المصادر الرسمية
+                        </p>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <!-- Slide 5: Protection -->
-        <section class="slide" data-slide="5">
+        <!-- Slide 4: Protection -->
+        <section class="slide" data-slide="4">
             <div class="slide-container">
                 <div class="section-header">
-                    <span class="section-number">الجزء الخامس</span>
-                    <h2 class="section-title">الحماية والوقاية</h2>
-                    <p class="section-subtitle">استراتيجيات للدفاع على جميع المستويات</p>
+                    <span class="section-number">التبويب الرابع</span>
+                    <h2 class="section-title">كيف نتعامل معه ونحمي أنفسنا؟</h2>
+                    <p class="section-subtitle">إجراءات عملية للبقاء آمنين</p>
                 </div>
 
                 <div class="protection-tabs fade-in-up delay-1">
-                    <button class="tab-btn active" onclick="openTab('individual')">
-                        <i class="fas fa-user"></i> مستوى الفرد
+                    <button class="tab-btn active" onclick="openTab('prevention')">
+                        <i class="fas fa-shield-alt"></i> الوقاية
                     </button>
-                    <button class="tab-btn" onclick="openTab('organization')">
-                        <i class="fas fa-building"></i> مستوى المؤسسة
+                    <button class="tab-btn" onclick="openTab('action')">
+                        <i class="fas fa-exclamation-triangle"></i> عند الشك
                     </button>
-                    <button class="tab-btn" onclick="openTab('national')">
-                        <i class="fas fa-flag"></i> مستوى الدولة
+                    <button class="tab-btn" onclick="openTab('recovery')">
+                        <i class="fas fa-ambulance"></i> إذا وقعت ضحية
                     </button>
                 </div>
 
-                <div id="individual" class="tab-content active">
+                <div id="prevention" class="tab-content active">
                     <ul class="protection-list">
                         <li class="protection-item fade-in-up delay-1">
                             <div class="protection-num">1</div>
                             <div class="protection-content">
-                                <h4>التشكك دائمًا</h4>
-                                <p>لا تثق تلقائياً في أي محتوى صادم أو غير متوقع. ابحث عن المصدر الأصلي وتأكد من مصداقيته.</p>
+                                <h4>حماية صورك الشخصية</h4>
+                                <p>قلل نشر صورك العائلية على وسائل التواصل. استخدم إعدادات الخصوصية القصوى. لا تشارك صوراً عالية الجودة للوجه.</p>
                             </div>
                         </li>
                         <li class="protection-item fade-in-up delay-2">
                             <div class="protection-num">2</div>
-                            <div class="protection-content">
-                                <h4>حماية بياناتك الشخصية</h4>
-                                <p>قلّل نشر صورك وفيديوهاتك على وسائل التواصل. استخدم إعدادات الخصوصية القصوى.</p>
-                            </div>
-                        </li>
-                        <li class="protection-item fade-in-up delay-3">
-                            <div class="protection-num">3</div>
                             <div class="protection-content">
                                 <h4>التوعية العائلية</h4>
-                                <p>علم أبناءك وأهلك أن ليس كل ما يرونه على الإنترنت حقيقي. درّبهم على التحقق.</p>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-
-                <div id="organization" class="tab-content">
-                    <ul class="protection-list">
-                        <li class="protection-item fade-in-up delay-1">
-                            <div class="protection-num">1</div>
-                            <div class="protection-content">
-                                <h4>سياسات أمنية صارمة</h4>
-                                <p>عدم تنفيذ تحويلات مالية بناءً على مكالمة صوتية فقط. استخدام كلمات سر مشتركة للتحقق.</p>
-                            </div>
-                        </li>
-                        <li class="protection-item fade-in-up delay-2">
-                            <div class="protection-num">2</div>
-                            <div class="protection-content">
-                                <h4>تدريب الموظفين</h4>
-                                <p>ورش عمل دورية عن التزييف العميق. محاكاة هجمات تدريبية لاختبار اليقظة.</p>
+                                <p>علم أطفالك أن ليس كل ما يرونه على الإنترنت حقيقي. شارك معهم أمثلة عن التزييف العميق بلغة بسيطة.</p>
                             </div>
                         </li>
                         <li class="protection-item fade-in-up delay-3">
                             <div class="protection-num">3</div>
                             <div class="protection-content">
-                                <h4>نظم التحقق المتقدمة</h4>
-                                <p>استخدام التوثيق الثنائي للمعاملات الحساسة. أنظمة تحليل الصوت والفيديو للكشف عن التزوير.</p>
+                                <h4>كلمات سر خاصة</h4>
+                                <p>اتفق مع عائلتك وأصدقائك على كلمات سر أو أسئلة شخصية للتحقق من هوية المتصل في الأمور المهمة.</p>
                             </div>
                         </li>
                     </ul>
                 </div>
 
-                <div id="national" class="tab-content">
+                <div id="action" class="tab-content">
                     <ul class="protection-list">
                         <li class="protection-item fade-in-up delay-1">
                             <div class="protection-num">1</div>
                             <div class="protection-content">
-                                <h4>قوانين رادعة</h4>
-                                <p>تشريعات تجرّم إنشاء واستخدام التزييف العميق لأغراض ضارة. عقوبات صارمة للمخالفين.</p>
+                                <h4>لا تتفاعل بسرعة</h4>
+                                <p>إذا تلقيت مكالمة أو رسالة مفاجئة تطلب مالاً أو معلومات شخصية، خذ وقتك للتحقق. لا تتصرف تحت الضغط.</p>
                             </div>
                         </li>
                         <li class="protection-item fade-in-up delay-2">
                             <div class="protection-num">2</div>
                             <div class="protection-content">
-                                <h4>منصات مراقبة وطنية</h4>
-                                <p>فرق مختصة لرصد المحتوى المزيف الخطير. تعاون مع منصات التواصل للحد من الانتشار.</p>
+                                <h4>تحقق عبر قنوات أخرى</h4>
+                                <p>اتصل بالشخص المعني على رقم آخر معروف، أو راسله على تطبيق مختلف للتأكد من أنه هو بالفعل.</p>
                             </div>
                         </li>
                         <li class="protection-item fade-in-up delay-3">
                             <div class="protection-num">3</div>
                             <div class="protection-content">
-                                <h4>التعاون الدولي</h4>
-                                <p>تبادل المعلومات والخبرات مع الدول الأخرى. اتفاقيات لمكافحة التزييف العميق عبر الحدود.</p>
+                                <h4>استخدم كلمة السر المتفق عليها</h4>
+                                <p>إذا كان المتصل يدعي أنه قريبك، اسأله عن كلمة السر المتفق عليها أو سؤال شخصي يعرفه فقط من تثق بهم.</p>
                             </div>
                         </li>
                     </ul>
                 </div>
 
-                <div class="tools-grid fade-in-up delay-4" style="margin-top: 3rem;">
-                    <div class="tool-card">
-                        <div class="tool-icon"><i class="fas fa-shield-alt"></i></div>
-                        <div class="tool-name">Microsoft Video Authenticator</div>
-                        <div class="tool-desc">أداة مجانية للكشف عن فيديوهات Deep Fake</div>
-                    </div>
-                    <div class="tool-card">
-                        <div class="tool-icon"><i class="fas fa-search"></i></div>
-                        <div class="tool-name">Reverse Image Search</div>
-                        <div class="tool-desc">البحث العكسي عن الصور للتحقق من أصالتها</div>
-                    </div>
-                    <div class="tool-card">
-                        <div class="tool-icon"><i class="fas fa-graduation-cap"></i></div>
-                        <div class="tool-name">دورات توعوية</div>
-                        <div class="tool-desc">دورات أونلاين مجانية عن الأمن السيبراني</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Slide 6: Conclusion -->
-        <section class="slide" data-slide="6">
-            <div class="slide-container">
-                <div class="section-header">
-                    <span class="section-number">الجزء الأخير</span>
-                    <h2 class="section-title">الخاتمة</h2>
-                    <p class="section-subtitle">رسالتنا للأمن السيبراني في عصر الذكاء الاصطناعي</p>
+                <div id="recovery" class="tab-content">
+                    <ul class="protection-list">
+                        <li class="protection-item fade-in-up delay-1">
+                            <div class="protection-num">1</div>
+                            <div class="protection-content">
+                                <h4>بلغ فوراً</h4>
+                                <p>إذا اكتشفت فيديو مزيفاً لك، بلغ عنه فوراً على المنصة التي نشر فيها. معظم المنصات لديها سياسات لإزالة المحتوى المزيف.</p>
+                            </div>
+                        </li>
+                        <li class="protection-item fade-in-up delay-2">
+                            <div class="protection-num">2</div>
+                            <div class="protection-content">
+                                <h4>أبلغ الجهات المختصة</h4>
+                                <p>في حالة الاحتيال المالي أو الابتزاز، اذهب لأقرب مركز شرطة أو جهة أمنية مختصة بالإلكترونيات.</p>
+                            </div>
+                        </li>
+                        <li class="protection-item fade-in-up delay-3">
+                            <div class="protection-num">3</div>
+                            <div class="protection-content">
+                                <h4>اطلب الدعم النفسي</h4>
+                                <p>كونك ضحية للتزييف العميق يمكن أن يكون مرهقاً نفسياً. لا تتردد في طلب المساعدة من مختص إذا احتجت لذلك.</p>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
 
-                <div class="conclusion-card fade-in-up delay-1">
-                    <div class="quote">
-                        "في عصر الذكاء الاصطناعي، الشك الصحّي والتحقق ليسا خياراً، بل ضرورة أمنية. التزييف العميق ليس مجرد تقنية، بل تحوّل في مفهوم الحقيقة نفسها."
-                    </div>
-                </div>
-
-                <div class="cards-grid" style="margin-top: 3rem;">
-                    <div class="card fade-in-up delay-2">
-                        <div class="card-icon"><i class="fas fa-brain"></i></div>
-                        <h3 class="card-title">التحدي</h3>
-                        <p class="card-text">
-                            كلما تطورت تقنيات الكشف، تطورت تقنيات التزييف. إنها سباق دائم بين الخير والشر.
-                        </p>
-                    </div>
-                    <div class="card fade-in-up delay-3">
-                        <div class="card-icon blue"><i class="fas fa-hands-helping"></i></div>
-                        <h3 class="card-title">الحل</h3>
-                        <p class="card-text">
-                            التعاون بين: الأفراد، المؤسسات، الحكومات، منصات التواصل، والباحثين.
-                        </p>
-                    </div>
-                    <div class="card fade-in-up delay-4">
-                        <div class="card-icon green"><i class="fas fa-seedling"></i></div>
-                        <h3 class="card-title">المستقبل</h3>
-                        <p class="card-text">
-                            مع التطور السريع، يجب أن نكون مستعدين لمواجهات أكثر تعقيداً في السنوات القادمة.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="example-card fade-in-up delay-5" style="margin-top: 3rem;">
-                    <div class="example-label">دعوة للعمل</div>
+                <div class="example-card fade-in-up delay-4" style="margin-top: 2rem;">
+                    <div class="example-label">نصائح ذهبية</div>
                     <div class="example-title">
-                        <i class="fas fa-bullhorn"></i>
-                        ماذا يمكنك أن تفعل اليوم؟
+                        <i class="fas fa-graduation-cap"></i>
+                        تذكر دائماً
                     </div>
                     <div class="example-content">
-                        <ol style="padding-right: 1.5rem; margin-top: 1rem;">
-                            <li><strong>شارك هذه المعلومات</strong> مع 3 أشخاص على الأقل</li>
-                            <li><strong>طبّق نصائح الحماية</strong> في عملك وحياتك الشخصية</li>
-                            <li><strong>دعّم مبادرات التوعية</strong> بالأمن السيبراني</li>
-                            <li><strong>ابلغ عن المحتوى المزيف</strong> عندما تراه</li>
-                            <li><strong>كن ناقداً ذكياً</strong> للمحتوى الذي تستهلكه</li>
-                        </ol>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                            <div style="background: rgba(6, 182, 212, 0.1); padding: 1rem; border-radius: 10px;">
+                                <h4 style="color: var(--cyber-blue); margin-bottom: 0.5rem;"><i class="fas fa-brain"></i> فكر قبل أن تشارك</h4>
+                                <p style="color: var(--text-muted); font-size: 0.95rem;">هل هذه الصورة ضرورية للمشاركة؟</p>
+                            </div>
+                            <div style="background: rgba(16, 185, 129, 0.1); padding: 1rem; border-radius: 10px;">
+                                <h4 style="color: var(--success); margin-bottom: 0.5rem;"><i class="fas fa-check-double"></i> تحقق مرتين</h4>
+                                <p style="color: var(--text-muted); font-size: 0.95rem;">من أي محتوى يبدو مشبوهاً</p>
+                            </div>
+                            <div style="background: rgba(239, 68, 68, 0.1); padding: 1rem; border-radius: 10px;">
+                                <h4 style="color: var(--accent); margin-bottom: 0.5rem;"><i class="fas fa-share-alt"></i> انشر الوعي</h4>
+                                <p style="color: var(--text-muted); font-size: 0.95rem;">علم الآخرين ما تعلمته اليوم</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -2038,7 +1543,7 @@
             <i class="fas fa-arrow-right"></i>
         </button>
         <div class="slide-counter">
-            <span id="currentSlide">1</span> / <span id="totalSlides">7</span>
+            <span id="currentSlide">1</span> / <span id="totalSlides">5</span>
         </div>
         <button class="arrow-btn" onclick="nextSlide()" id="nextBtn" aria-label="الشريحة التالية">
             <i class="fas fa-arrow-left"></i>
@@ -2049,19 +1554,16 @@
     <div class="credits-footer">
         <div class="footer-left">
             <div class="author-item">
-
-            </div>
-            <div class="author-item">
                 <i class="fas fa-user-graduate author-icon"></i>
                 <div>
-                    <div class="author-name">الأستاذة أسماء محمد</div>
-                    
+                    <div class="author-name">عرض توعوي</div>
+                    <div class="author-title">لعامة الناس</div>
                 </div>
             </div>
         </div>
         <div class="footer-right">
             <i class="fas fa-shield-alt footer-icon"></i>
-            <span>ندوة الأمن السيبراني - التزييف العميق 2026</span>
+            <span>التزييف العميق - دليل الحماية المبسط</span>
         </div>
     </div>
 
@@ -2132,7 +1634,7 @@
                 prevSlide();
             } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
                 nextSlide();
-            } else if (e.key >= '0' && e.key <= '6') {
+            } else if (e.key >= '0' && e.key <= '4') {
                 goToSlide(parseInt(e.key));
             }
         });
@@ -2154,7 +1656,6 @@
             const sidebar = document.getElementById('sidebar');
             sidebar.classList.toggle('open');
             
-            // Close sidebar when clicking outside
             if (sidebar.classList.contains('open')) {
                 document.addEventListener('click', closeSidebarOnClickOutside);
             } else {
@@ -2234,5 +1735,3 @@
     </script>
 </body>
 </html>
-
-
