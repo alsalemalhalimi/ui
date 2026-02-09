@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>التزييف العميق (Deep Fake) -مخاطر تقنية </title>
+    <title>التزييف العميق (Deep Fake) - مخاطر تقنية</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Reset and Base Styles */
         :root {
             --primary: #0f172a;
             --secondary: #1e293b;
@@ -20,6 +21,23 @@
             --warning: #f59e0b;
             --gradient-1: linear-gradient(135deg, #ef4444 0%, #8b5cf6 100%);
             --gradient-2: linear-gradient(135deg, #06b6d4 0%, #8b5cf6 100%);
+            --border-radius: 12px;
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+            --spacing-md: 1.5rem;
+            --spacing-lg: 2rem;
+            --spacing-xl: 3rem;
+            --container-max: 1200px;
+            --nav-height: 70px;
+            --footer-height: 60px;
+            --z-background: -10;
+            --z-content: 1;
+            --z-nav: 1000;
+            --z-sidebar: 999;
+            --z-modal: 9999;
+            --transition-fast: 0.2s ease;
+            --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 0.5s ease;
         }
 
         .light {
@@ -33,6 +51,12 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
         }
 
         body {
@@ -41,52 +65,51 @@
             color: var(--text);
             min-height: 100vh;
             overflow-x: hidden;
-            transition: all 0.3s ease;
+            transition: background-color var(--transition-normal);
+            line-height: 1.6;
         }
 
-        /* Animated Background */
-        .bg-animation {
+        /* Fixed Background Layers */
+        .bg-layers {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
-            overflow: hidden;
+            z-index: var(--z-background);
+            pointer-events: none;
         }
 
-        .bg-animation::before {
-            content: '';
+        .bg-gradient {
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: 
                 radial-gradient(circle at 20% 80%, var(--accent-glow) 0%, transparent 40%),
-                radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.2) 0%, transparent 40%),
+                radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 40%),
                 radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.1) 0%, transparent 50%);
-            animation: bgFloat 20s ease-in-out infinite;
+            animation: float 20s ease-in-out infinite;
         }
 
-        @keyframes bgFloat {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            33% { transform: translate(2%, 2%) rotate(1deg); }
-            66% { transform: translate(-1%, 1%) rotate(-1deg); }
-        }
-
-        /* Grid Pattern */
-        .grid-pattern {
-            position: fixed;
+        .grid-overlay {
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             background-image: 
-                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-            background-size: 50px 50px;
-            z-index: -1;
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.5;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(1%, 1%) rotate(0.5deg); }
+            66% { transform: translate(-1%, 1%) rotate(-0.5deg); }
         }
 
         /* Navigation */
@@ -95,85 +118,98 @@
             top: 0;
             left: 0;
             right: 0;
-            padding: 1rem 2rem;
+            height: var(--nav-height);
+            padding: 0 var(--spacing-lg);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(15, 23, 42, 0.8);
+            background: rgba(15, 23, 42, 0.9);
             backdrop-filter: blur(20px);
-            z-index: 1000;
+            -webkit-backdrop-filter: blur(20px);
+            z-index: var(--z-nav);
             border-bottom: 1px solid rgba(255,255,255,0.1);
+            transition: all var(--transition-normal);
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            font-size: 1.25rem;
+            gap: var(--spacing-sm);
+            font-size: 1.1rem;
             font-weight: 700;
+            white-space: nowrap;
         }
 
         .logo-icon {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             background: var(--gradient-1);
-            border-radius: 10px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1rem;
+            flex-shrink: 0;
         }
 
         .nav-controls {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: var(--spacing-sm);
         }
 
         .nav-btn {
             background: rgba(255,255,255,0.1);
             border: none;
             color: var(--text);
-            padding: 0.5rem 1rem;
+            padding: var(--spacing-xs) var(--spacing-md);
             border-radius: 8px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all var(--transition-fast);
             font-family: inherit;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-height: 36px;
         }
 
         .nav-btn:hover {
             background: rgba(255,255,255,0.2);
+            transform: translateY(-1px);
         }
 
         /* Progress Bar */
         .progress-container {
             position: fixed;
-            top: 70px;
+            top: var(--nav-height);
             left: 0;
             right: 0;
-            height: 4px;
-            background: rgba(255,255,255,0.1);
-            z-index: 999;
+            height: 3px;
+            background: rgba(255,255,255,0.05);
+            z-index: var(--z-nav);
         }
 
         .progress-bar {
             height: 100%;
             background: var(--gradient-1);
-            transition: width 0.5s ease;
-            box-shadow: 0 0 20px var(--accent-glow);
+            transition: width var(--transition-normal);
+            width: 0%;
         }
 
-        /* Main Content */
+        /* Main Presentation Container */
         .presentation {
-            padding-top: 80px;
+            padding-top: calc(var(--nav-height) + 10px);
             min-height: 100vh;
+            position: relative;
+            z-index: var(--z-content);
         }
 
         .slide {
             display: none;
-            animation: slideIn 0.6s ease;
-            min-height: calc(100vh - 120px);
-            padding: 2rem;
+            min-height: calc(100vh - var(--nav-height) - var(--footer-height));
+            padding: var(--spacing-lg);
+            animation: slideIn 0.4s ease-out;
         }
 
         .slide.active {
@@ -183,7 +219,7 @@
         @keyframes slideIn {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(20px);
             }
             to {
                 opacity: 1;
@@ -192,134 +228,86 @@
         }
 
         .slide-container {
-            max-width: 1200px;
+            max-width: var(--container-max);
             margin: 0 auto;
+            width: 100%;
+            position: relative;
         }
 
-        /* Intro Slide */
+        /* Introduction Slide */
         .intro-slide {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            min-height: calc(100vh - 120px);
+            min-height: calc(100vh - var(--nav-height) - var(--footer-height) - 40px);
+            padding: var(--spacing-xl) var(--spacing-lg);
         }
 
-        .glitch-container {
-            position: relative;
-            margin-bottom: 2rem;
+        .title-container {
+            margin-bottom: var(--spacing-xl);
+            max-width: 800px;
         }
 
         .main-title {
-            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-size: clamp(2.5rem, 6vw, 4rem);
             font-weight: 800;
             background: var(--gradient-1);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            position: relative;
-            animation: glitch 3s infinite;
-        }
-
-        @keyframes glitch {
-            0%, 90%, 100% { transform: translate(0); }
-            92% { transform: translate(-2px, 2px); }
-            94% { transform: translate(2px, -2px); }
-            96% { transform: translate(-2px, -2px); }
-            98% { transform: translate(2px, 2px); }
+            margin-bottom: var(--spacing-sm);
+            line-height: 1.2;
         }
 
         .subtitle {
-            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            font-size: clamp(1.2rem, 3vw, 1.6rem);
             color: var(--text-muted);
-            margin-bottom: 3rem;
+            margin-bottom: var(--spacing-xl);
         }
 
         .warning-badge {
             display: inline-flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: var(--spacing-sm);
             background: rgba(239, 68, 68, 0.15);
             border: 1px solid var(--accent);
-            padding: 1rem 2rem;
+            padding: var(--spacing-md) var(--spacing-lg);
             border-radius: 50px;
             color: var(--accent);
             font-weight: 600;
+            margin-bottom: var(--spacing-xl);
             animation: pulse 2s infinite;
+            max-width: 600px;
         }
 
         @keyframes pulse {
-            0%, 100% { box-shadow: 0 0 0 0 var(--accent-glow); }
-            50% { box-shadow: 0 0 0 20px transparent; }
+            0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            50% { box-shadow: 0 0 0 15px transparent; }
         }
 
-        .start-btn {
-            margin-top: 3rem;
-            padding: 1.25rem 3rem;
-            font-size: 1.2rem;
-            font-weight: 700;
-            background: var(--gradient-1);
-            border: none;
-            border-radius: 50px;
-            color: white;
-            cursor: pointer;
-            font-family: inherit;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .start-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 40px var(--accent-glow);
-        }
-
-        /* Section Header */
-        .section-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .section-number {
-            display: inline-block;
-            background: var(--gradient-1);
-            color: white;
-            padding: 0.5rem 1.5rem;
-            border-radius: 50px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-
-        .section-title {
-            font-size: clamp(1.8rem, 4vw, 2.8rem);
-            font-weight: 800;
-            margin-bottom: 0.5rem;
-        }
-
-        .section-subtitle {
-            color: var(--text-muted);
-            font-size: 1.1rem;
-        }
-
-        /* Cards */
+        /* Cards Grid */
         .cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--spacing-md);
+            margin: var(--spacing-xl) 0;
+            width: 100%;
+            max-width: 1000px;
         }
 
         .card {
-            background: rgba(30, 41, 59, 0.5);
+            background: rgba(30, 41, 59, 0.6);
             border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 20px;
-            padding: 2rem;
-            transition: all 0.3s;
+            border-radius: var(--border-radius);
+            padding: var(--spacing-lg);
+            transition: all var(--transition-normal);
             position: relative;
             overflow: hidden;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
         .card::before {
@@ -328,16 +316,16 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 4px;
+            height: 3px;
             background: var(--gradient-1);
             transform: scaleX(0);
-            transition: transform 0.3s;
+            transition: transform var(--transition-normal);
         }
 
         .card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-4px);
             border-color: var(--accent);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
         .card:hover::before {
@@ -345,40 +333,348 @@
         }
 
         .card-icon {
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             background: var(--gradient-1);
-            border-radius: 15px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            margin-bottom: var(--spacing-md);
+            flex-shrink: 0;
         }
 
         .card-icon.blue { background: var(--gradient-2); }
         .card-icon.green { background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%); }
-        .card-icon.yellow { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); }
 
         .card-title {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: 700;
-            margin-bottom: 1rem;
+            margin-bottom: var(--spacing-sm);
+            line-height: 1.4;
         }
 
         .card-text {
             color: var(--text-muted);
-            line-height: 1.8;
+            line-height: 1.6;
+            font-size: 0.95rem;
+            flex-grow: 1;
         }
 
-        /* Example Card */
-        .example-card {
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            border-radius: 20px;
-            padding: 2rem;
-            margin: 1.5rem 0;
+        /* تأثير تكبير الحاوية مع النص - نظام جديد */
+        .zoom-container {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+            cursor: pointer;
             position: relative;
+            z-index: 10;
+            transform-origin: center;
+            will-change: transform, font-size, background;
+            backface-visibility: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* تأثير التكبير للحاوية مع محتوياتها */
+        .zoom-container:hover {
+            transform: scale(1.2) !important;
+            z-index: var(--z-modal) !important;
+            position: relative !important;
+        }
+
+        /* تكبير الحاوية مع محتواها */
+        .zoom-container:hover .card {
+            transform: none !important;
+            background: rgba(15, 23, 42, 0.95) !important;
+            border: 2px solid var(--accent) !important;
+            box-shadow: 
+                0 0 40px var(--accent-glow),
+                0 20px 60px rgba(0, 0, 0, 0.4) !important;
+            padding: calc(var(--spacing-lg) * 1.2) !important;
+        }
+
+        .zoom-container:hover .card-text {
+            font-size: 1.1em !important;
+            font-weight: 600 !important;
+            color: var(--text) !important;
+            line-height: 1.8 !important;
+        }
+
+        .zoom-container:hover .card-title {
+            font-size: 1.4em !important;
+            color: var(--accent) !important;
+            margin-bottom: var(--spacing-md) !important;
+        }
+
+        .zoom-container:hover .card-icon {
+            transform: scale(1.3) !important;
+            margin-bottom: calc(var(--spacing-md) * 1.2) !important;
+        }
+
+        /* تأثير للعناوين الكبيرة */
+        .zoom-container:hover .section-title {
+            font-size: 2.8em !important;
+            padding: var(--spacing-lg) !important;
+            background: var(--gradient-1) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            background-clip: text !important;
+            display: inline-block !important;
+        }
+
+        .zoom-container:hover .section-subtitle {
+            font-size: 1.3em !important;
+            color: var(--text) !important;
+            font-weight: 600 !important;
+        }
+
+        /* تأثير للبطاقات في الشبكة */
+        .cards-grid .zoom-container:hover {
+            transform: scale(1.25) !important;
+        }
+
+        /* تأثير للخطوات */
+        .zoom-container:hover .step {
+            background: rgba(239, 68, 68, 0.1) !important;
+            border-color: var(--accent) !important;
+            padding: calc(var(--spacing-lg) * 1.2) !important;
+            transform: translateX(-10px) !important;
+        }
+
+        .zoom-container:hover .step-content h3 {
+            font-size: 1.4em !important;
+            color: var(--accent) !important;
+        }
+
+        .zoom-container:hover .step-content p {
+            font-size: 1.1em !important;
+            color: var(--text) !important;
+            font-weight: 500 !important;
+        }
+
+        .zoom-container:hover .step-number {
+            transform: scale(1.2) !important;
+            background: var(--gradient-1) !important;
+        }
+
+        /* تأثير للأمثلة */
+        .zoom-container:hover .example-container {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%) !important;
+            border: 2px solid var(--accent) !important;
+            padding: calc(var(--spacing-lg) * 1.2) !important;
+        }
+
+        .zoom-container:hover .example-title {
+            font-size: 1.4em !important;
+            color: var(--accent) !important;
+        }
+
+        .zoom-container:hover .example-content {
+            font-size: 1.1em !important;
+            color: var(--text) !important;
+            line-height: 1.8 !important;
+        }
+
+        .zoom-container:hover .example-result {
+            font-size: 1.2em !important;
+            padding: var(--spacing-md) !important;
+            background: rgba(239, 68, 68, 0.3) !important;
+        }
+
+        /* تأثير للقوائم */
+        .zoom-container:hover li {
+            transform: translateX(-10px) !important;
+            font-size: 1.1em !important;
+            margin-bottom: var(--spacing-sm) !important;
+            color: var(--text) !important;
+            font-weight: 500 !important;
+        }
+
+        /* تأثير للنصوص القصيرة */
+        .zoom-container:hover p:not(.card-text):not(.step-content p):not(.example-content p) {
+            font-size: 1.1em !important;
+            color: var(--text) !important;
+            font-weight: 500 !important;
+            line-height: 1.8 !important;
+        }
+
+        /* تأثير للعناوين الصغيرة */
+        .zoom-container:hover h3:not(.card-title):not(.section-title):not(.example-title) {
+            font-size: 1.3em !important;
+            color: var(--accent) !important;
+            margin-bottom: var(--spacing-sm) !important;
+        }
+
+        .zoom-container:hover h4 {
+            font-size: 1.2em !important;
+            color: var(--accent) !important;
+        }
+
+        /* تأثير خاص للعناصر التفاعلية */
+        .zoom-container:hover .warning-badge {
+            transform: scale(1.1) !important;
+            background: rgba(239, 68, 68, 0.3) !important;
+            padding: calc(var(--spacing-md) * 1.2) calc(var(--spacing-lg) * 1.2) !important;
+            font-size: 1.1em !important;
+        }
+
+        /* تأثير للشريحة التمهيدية */
+        .zoom-container:hover .main-title {
+            font-size: 4.5em !important;
+            padding: var(--spacing-lg) !important;
+            display: inline-block !important;
+        }
+
+        .zoom-container:hover .subtitle {
+            font-size: 2em !important;
+            color: var(--text) !important;
+            font-weight: 600 !important;
+        }
+
+        /* تأثير للكشف */
+        .zoom-container:hover .detection-card {
+            background: rgba(30, 41, 59, 0.9) !important;
+            border: 2px solid var(--success) !important;
+            padding: calc(var(--spacing-lg) * 1.2) !important;
+            transform: translateY(-5px) !important;
+        }
+
+        .zoom-container:hover .detection-title {
+            font-size: 1.3em !important;
+            color: var(--success) !important;
+        }
+
+        .zoom-container:hover .detection-desc {
+            font-size: 1em !important;
+            color: var(--text) !important;
+            line-height: 1.6 !important;
+        }
+
+        /* تأثير للحماية */
+        .zoom-container:hover .protection-item {
+            background: rgba(30, 41, 59, 0.9) !important;
+            border: 2px solid var(--cyber-purple) !important;
+            padding: calc(var(--spacing-lg) * 1.2) !important;
+        }
+
+        .zoom-container:hover .protection-content h4 {
+            font-size: 1.3em !important;
+            color: var(--cyber-purple) !important;
+        }
+
+        .zoom-container:hover .protection-content p {
+            font-size: 1.05em !important;
+            color: var(--text) !important;
+        }
+
+        /* تأثير للجدول */
+        .zoom-container:hover table {
+            transform: scale(1.05) !important;
+            background: rgba(30, 41, 59, 0.9) !important;
+            border: 1px solid var(--accent) !important;
+            border-radius: var(--border-radius) !important;
+            overflow: hidden !important;
+        }
+
+        .zoom-container:hover td {
+            padding: var(--spacing-md) !important;
+            font-size: 1.1em !important;
+            color: var(--text) !important;
+        }
+
+        /* تأثير للعرض التوضيحي */
+        .zoom-container:hover .demo-section {
+            background: rgba(30, 41, 59, 0.9) !important;
+            border: 2px solid var(--accent) !important;
+            padding: calc(var(--spacing-lg) * 1.2) !important;
+        }
+
+        .zoom-container:hover .demo-grid {
+            gap: calc(var(--spacing-lg) * 1.2) !important;
+        }
+
+        /* تأثير للشريط السفلي */
+        .zoom-container:hover .footer-right span {
+            font-size: 1.1em !important;
+            color: var(--text) !important;
+            font-weight: 600 !important;
+        }
+
+        /* منع التأثير على عناصر التحكم */
+        .nav-btn, .arrow-btn, .tab-btn, .start-btn, .menu-item {
+            cursor: pointer !important;
+        }
+
+        .nav-btn:hover, .arrow-btn:hover, .tab-btn:hover, .start-btn:hover, .menu-item:hover {
+            transform: scale(1.1) !important;
+            z-index: 100 !important;
+        }
+
+        /* Buttons */
+        .start-btn {
+            margin-top: var(--spacing-lg);
+            padding: var(--spacing-md) var(--spacing-xl);
+            font-size: 1.1rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all var(--transition-normal);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            min-height: 50px;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px var(--accent-glow);
+        }
+
+        /* Section Headers */
+        .section-header {
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+            padding: 0 var(--spacing-md);
+        }
+
+        .section-number {
+            display: inline-block;
+            background: var(--gradient-1);
+            color: white;
+            padding: 0.4rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .section-title {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 800;
+            margin-bottom: var(--spacing-sm);
+            line-height: 1.3;
+        }
+
+        .section-subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Example Cards */
+        .example-container {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: var(--border-radius);
+            padding: var(--spacing-lg);
+            margin: var(--spacing-lg) 0;
+            position: relative;
+            overflow: hidden;
         }
 
         .example-label {
@@ -387,40 +683,45 @@
             right: 20px;
             background: var(--accent);
             color: white;
-            padding: 0.4rem 1rem;
+            padding: 0.3rem 0.9rem;
             border-radius: 20px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 600;
+            z-index: 2;
         }
 
         .example-title {
             font-size: 1.2rem;
             font-weight: 700;
-            margin-bottom: 1rem;
+            margin-bottom: var(--spacing-sm);
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 0.5rem;
+            color: var(--text);
         }
 
         .example-content {
             color: var(--text-muted);
-            line-height: 1.8;
+            line-height: 1.7;
+            font-size: 0.95rem;
         }
 
         .example-result {
-            margin-top: 1rem;
-            padding: 1rem;
-            background: rgba(239, 68, 68, 0.2);
-            border-radius: 10px;
-            border-right: 4px solid var(--accent);
+            margin-top: var(--spacing-md);
+            padding: var(--spacing-md);
+            background: rgba(239, 68, 68, 0.15);
+            border-radius: 8px;
+            border-right: 3px solid var(--accent);
+            font-weight: 600;
+            color: var(--accent);
         }
 
-        /* Demo Scene */
-        .demo-scene {
+        /* Demo Section */
+        .demo-section {
             background: rgba(30, 41, 59, 0.7);
-            border-radius: 20px;
-            padding: 2rem;
-            margin: 2rem 0;
+            border-radius: var(--border-radius);
+            padding: var(--spacing-lg);
+            margin: var(--spacing-lg) 0;
             border: 1px solid rgba(255,255,255,0.1);
         }
 
@@ -428,12 +729,14 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: var(--spacing-lg);
+            color: var(--text);
+            font-weight: 600;
         }
 
         .demo-dot {
-            width: 12px;
-            height: 12px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
         }
 
@@ -441,24 +744,23 @@
         .demo-dot.yellow { background: #f59e0b; }
         .demo-dot.green { background: #10b981; }
 
-        .demo-content {
-            display: flex;
-            gap: 2rem;
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing-lg);
             align-items: center;
-            flex-wrap: wrap;
         }
 
         .demo-visual {
-            flex: 1;
-            min-width: 280px;
-        }
-
-        .fake-video {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            border-radius: 15px;
-            padding: 1.5rem;
             position: relative;
             overflow: hidden;
+            border-radius: 12px;
+        }
+
+        .fake-video-container {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            padding: var(--spacing-lg);
+            border-radius: 12px;
         }
 
         .video-placeholder {
@@ -468,10 +770,10 @@
                 0deg,
                 transparent,
                 transparent 2px,
-                rgba(6, 182, 212, 0.1) 2px,
-                rgba(6, 182, 212, 0.1) 4px
+                rgba(6, 182, 212, 0.08) 2px,
+                rgba(6, 182, 212, 0.08) 4px
             );
-            border-radius: 10px;
+            border-radius: 8px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -480,35 +782,35 @@
         }
 
         .face-outline {
-            width: 80px;
-            height: 100px;
-            border: 3px dashed var(--accent);
-            border-radius: 40px 40px 30px 30px;
+            width: 70px;
+            height: 90px;
+            border: 2px dashed var(--accent);
+            border-radius: 35px 35px 25px 25px;
             position: relative;
-            animation: faceGlitch 2s infinite;
+            animation: faceGlitch 3s infinite;
         }
 
         @keyframes faceGlitch {
             0%, 90%, 100% { border-color: var(--accent); }
-            92%, 96% { border-color: var(--cyber-blue); transform: translate(-2px, 0); }
-            94%, 98% { border-color: var(--cyber-purple); transform: translate(2px, 0); }
+            92%, 96% { border-color: var(--cyber-blue); }
+            94%, 98% { border-color: var(--cyber-purple); }
         }
 
         .face-eyes {
             position: absolute;
-            top: 30px;
+            top: 25px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 20px;
+            gap: 15px;
         }
 
         .eye {
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
             background: var(--accent);
             border-radius: 50%;
-            animation: blink 3s infinite;
+            animation: blink 4s infinite;
         }
 
         @keyframes blink {
@@ -518,147 +820,154 @@
 
         .deepfake-label {
             position: absolute;
-            bottom: 20px;
+            bottom: 15px;
             left: 50%;
             transform: translateX(-50%);
             background: var(--accent);
             color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
             font-weight: 600;
-            font-size: 0.9rem;
-            animation: labelPulse 1.5s infinite;
+            font-size: 0.85rem;
         }
 
-        @keyframes labelPulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .demo-text {
-            flex: 1;
-            min-width: 280px;
-        }
-
-        /* Steps Visualization */
+        /* Steps */
         .steps-container {
-            position: relative;
-            padding: 2rem 0;
+            margin: var(--spacing-xl) 0;
         }
 
         .step {
             display: flex;
-            align-items: center;
-            gap: 2rem;
-            margin-bottom: 3rem;
+            align-items: flex-start;
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
             background: rgba(30, 41, 59, 0.5);
-            padding: 2rem;
-            border-radius: 20px;
+            padding: var(--spacing-lg);
+            border-radius: var(--border-radius);
             border: 1px solid rgba(255,255,255,0.1);
+            transition: all var(--transition-normal);
+        }
+
+        .step:hover {
+            border-color: var(--accent);
+            transform: translateX(-5px);
         }
 
         .step-number {
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             background: var(--gradient-1);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: 700;
             flex-shrink: 0;
         }
 
+        .step-content {
+            flex: 1;
+        }
+
         .step-content h3 {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: 700;
-            margin-bottom: 0.5rem;
+            margin-bottom: var(--spacing-xs);
+            color: var(--text);
         }
 
         .step-content p {
             color: var(--text-muted);
-            line-height: 1.8;
+            line-height: 1.6;
+            font-size: 0.95rem;
         }
 
-        /* Detection Cards */
+        /* Detection Grid */
         .detection-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
+            gap: var(--spacing-md);
+            margin: var(--spacing-lg) 0;
         }
 
         .detection-card {
-            background: rgba(30, 41, 59, 0.5);
+            background: rgba(30, 41, 59, 0.6);
             border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 20px;
-            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            padding: var(--spacing-lg);
             text-align: center;
-            transition: all 0.3s;
+            transition: all var(--transition-normal);
         }
 
         .detection-card:hover {
             border-color: var(--success);
-            transform: scale(1.02);
+            transform: translateY(-3px);
         }
 
         .detection-icon {
-            width: 70px;
-            height: 70px;
+            width: 60px;
+            height: 60px;
             background: rgba(16, 185, 129, 0.2);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
-            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+            margin: 0 auto var(--spacing-md);
             color: var(--success);
         }
 
         .detection-title {
             font-weight: 700;
-            margin-bottom: 0.5rem;
+            margin-bottom: var(--spacing-xs);
+            font-size: 1.1rem;
         }
 
         .detection-desc {
             color: var(--text-muted);
-            font-size: 0.95rem;
-            line-height: 1.6;
+            font-size: 0.9rem;
+            line-height: 1.5;
         }
 
-        /* Protection Section */
+        /* Protection Tabs */
         .protection-tabs {
             display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-lg);
             flex-wrap: wrap;
             justify-content: center;
         }
 
         .tab-btn {
-            padding: 1rem 2rem;
+            padding: var(--spacing-sm) var(--spacing-lg);
             background: rgba(255,255,255,0.1);
             border: 1px solid rgba(255,255,255,0.1);
             border-radius: 50px;
             color: var(--text);
             cursor: pointer;
             font-family: inherit;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 600;
-            transition: all 0.3s;
+            transition: all var(--transition-normal);
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            min-height: 44px;
         }
 
-        .tab-btn:hover, .tab-btn.active {
+        .tab-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .tab-btn.active {
             background: var(--gradient-1);
             border-color: transparent;
         }
 
         .tab-content {
             display: none;
-            animation: fadeIn 0.5s ease;
+            animation: fadeIn 0.3s ease;
         }
 
         .tab-content.active {
@@ -676,55 +985,64 @@
 
         .protection-item {
             display: flex;
-            gap: 1rem;
-            padding: 1.5rem;
+            gap: var(--spacing-md);
+            padding: var(--spacing-lg);
             background: rgba(30, 41, 59, 0.5);
             border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 15px;
-            margin-bottom: 1rem;
-            transition: all 0.3s;
+            border-radius: var(--border-radius);
+            margin-bottom: var(--spacing-md);
+            transition: all var(--transition-normal);
         }
 
         .protection-item:hover {
             border-color: var(--cyber-purple);
-            transform: translateX(-5px);
+            transform: translateX(-3px);
         }
 
         .protection-num {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             background: var(--gradient-2);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
+            font-size: 0.9rem;
             flex-shrink: 0;
+        }
+
+        .protection-content {
+            flex: 1;
         }
 
         .protection-content h4 {
             font-weight: 600;
-            margin-bottom: 0.5rem;
+            margin-bottom: var(--spacing-xs);
+            font-size: 1.1rem;
+            color: var(--text);
         }
 
         .protection-content p {
             color: var(--text-muted);
             line-height: 1.6;
+            font-size: 0.95rem;
         }
 
-        /* Sidebar Menu */
+        /* Sidebar */
         .sidebar {
             position: fixed;
-            top: 80px;
+            top: var(--nav-height);
             right: -320px;
             width: 320px;
-            height: calc(100vh - 80px - 60px);
-            background: rgba(15, 23, 42, 0.98);
+            height: calc(100vh - var(--nav-height) - var(--footer-height));
+            background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border-left: 1px solid rgba(255,255,255,0.1);
-            padding: 2rem;
-            transition: right 0.3s ease;
-            z-index: 999;
+            padding: var(--spacing-lg);
+            transition: right var(--transition-normal);
+            z-index: var(--z-sidebar);
             overflow-y: auto;
         }
 
@@ -733,36 +1051,42 @@
         }
 
         .sidebar-title {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 700;
-            margin-bottom: 1.5rem;
+            margin-bottom: var(--spacing-lg);
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            color: var(--text);
         }
 
         .menu-item {
-            padding: 1rem;
+            padding: var(--spacing-md);
             background: rgba(255,255,255,0.05);
-            border-radius: 10px;
-            margin-bottom: 0.5rem;
+            border-radius: 8px;
+            margin-bottom: var(--spacing-xs);
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all var(--transition-fast);
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: var(--spacing-sm);
             border: 1px solid rgba(255,255,255,0.05);
+            color: var(--text);
         }
 
-        .menu-item:hover, .menu-item.active {
-            background: rgba(239, 68, 68, 0.2);
-            border-right: 3px solid var(--accent);
+        .menu-item:hover {
+            background: rgba(239, 68, 68, 0.15);
             border-color: var(--accent);
         }
 
+        .menu-item.active {
+            background: rgba(239, 68, 68, 0.2);
+            border-right: 3px solid var(--accent);
+        }
+
         .menu-num {
-            width: 25px;
-            height: 25px;
+            width: 24px;
+            height: 24px;
             background: var(--gradient-1);
             border-radius: 50%;
             display: flex;
@@ -770,31 +1094,39 @@
             justify-content: center;
             font-size: 0.8rem;
             font-weight: 600;
+            flex-shrink: 0;
         }
 
         /* Navigation Arrows */
-        .nav-arrows {
+        .nav-controls-bottom {
             position: fixed;
-            bottom: 2rem;
+            bottom: calc(var(--footer-height) + 20px);
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 1rem;
+            gap: var(--spacing-sm);
+            align-items: center;
             z-index: 100;
+            background: rgba(30, 41, 59, 0.9);
+            backdrop-filter: blur(10px);
+            padding: var(--spacing-sm);
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .arrow-btn {
-            width: 50px;
-            height: 50px;
-            background: rgba(30, 41, 59, 0.9);
+            width: 44px;
+            height: 44px;
+            background: rgba(255,255,255,0.1);
             border: 1px solid rgba(255,255,255,0.2);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all var(--transition-fast);
             color: var(--text);
+            font-size: 1rem;
         }
 
         .arrow-btn:hover:not(:disabled) {
@@ -804,102 +1136,171 @@
         }
 
         .arrow-btn:disabled {
-            opacity: 0.5;
+            opacity: 0.3;
             cursor: not-allowed;
+            transform: none !important;
         }
 
         .slide-counter {
-            background: rgba(30, 41, 59, 0.9);
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
+            padding: 0 var(--spacing-md);
             font-weight: 600;
-            display: flex;
-            align-items: center;
+            font-size: 0.9rem;
+            color: var(--text);
+            min-width: 60px;
+            text-align: center;
         }
 
-        /* Footer with Credits */
+        /* Footer */
         .credits-footer {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
+            height: var(--footer-height);
             background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(10px);
-            padding: 0.75rem 2rem;
+            padding: 0 var(--spacing-lg);
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-top: 1px solid rgba(255,255,255,0.1);
-            z-index: 99;
+            z-index: var(--z-nav);
             font-size: 0.85rem;
-            height: 60px;
         }
 
-        .footer-left {
+        .footer-left, .footer-right {
             display: flex;
             align-items: center;
-            gap: 1rem;
-        }
-
-        .footer-right {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            gap: var(--spacing-sm);
             color: var(--text-muted);
         }
 
         .footer-icon {
             color: var(--cyber-blue);
-            margin-left: 0.25rem;
         }
 
-        /* Animation Classes */
-        .fade-in-up {
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 0.6s ease forwards;
+        /* Notification */
+        .notification {
+            position: fixed !important;
+            top: 90px;
+            right: 20px;
+            background: var(--gradient-1) !important;
+            color: white !important;
+            padding: 10px 20px !important;
+            border-radius: 8px !important;
+            z-index: var(--z-modal) !important;
+            animation: slideDown 0.3s ease, fadeOut 0.3s ease 1.7s forwards;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
-        @keyframes fadeInUp {
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
 
-        .delay-1 { animation-delay: 0.1s; }
-        .delay-2 { animation-delay: 0.2s; }
-        .delay-3 { animation-delay: 0.3s; }
-        .delay-4 { animation-delay: 0.4s; }
-        .delay-5 { animation-delay: 0.5s; }
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+        }
 
-        /* Responsive */
+        /* Responsive Design */
         @media (max-width: 768px) {
+            :root {
+                --spacing-lg: 1.2rem;
+                --spacing-xl: 2rem;
+            }
+
             .nav {
-                padding: 1rem;
+                padding: 0 var(--spacing-md);
+                height: 60px;
             }
 
             .logo-text {
+                font-size: 0.9rem;
+            }
+
+            .nav-btn {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.85rem;
+                min-height: 32px;
+            }
+
+            .nav-btn span {
                 display: none;
             }
 
+            .nav-btn i {
+                margin: 0;
+            }
+
+            .progress-container {
+                top: 60px;
+            }
+
+            .presentation {
+                padding-top: 65px;
+            }
+
             .slide {
-                padding: 1rem;
+                padding: var(--spacing-md);
+                min-height: calc(100vh - 60px - 70px);
             }
 
-            .demo-content {
+            .intro-slide {
+                padding: var(--spacing-lg) var(--spacing-md);
+            }
+
+            .main-title {
+                font-size: clamp(2rem, 5vw, 3rem);
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-sm);
+                margin: var(--spacing-lg) 0;
+            }
+
+            .card {
+                padding: var(--spacing-md);
+            }
+
+            .section-header {
+                margin-bottom: var(--spacing-lg);
+            }
+
+            .section-title {
+                font-size: clamp(1.5rem, 4vw, 2rem);
+            }
+
+            .step {
                 flex-direction: column;
+                gap: var(--spacing-md);
+                text-align: center;
+                padding: var(--spacing-md);
             }
 
-            .nav-arrows {
-                bottom: 4rem;
+            .step-number {
+                width: 40px;
+                height: 40px;
+                font-size: 1.1rem;
             }
 
-            .sidebar {
-                width: 100%;
-                right: -100%;
-                top: 70px;
-                height: calc(100vh - 70px - 80px);
+            .demo-grid {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-md);
+            }
+
+            .video-placeholder {
+                height: 150px;
             }
 
             .protection-tabs {
@@ -911,42 +1312,201 @@
                 justify-content: center;
             }
 
+            .sidebar {
+                width: 100%;
+                right: -100%;
+                top: 60px;
+                height: calc(100vh - 60px - 70px);
+                padding: var(--spacing-md);
+            }
+
+            .nav-controls-bottom {
+                bottom: 80px;
+                padding: 0.5rem;
+            }
+
+            .arrow-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 0.9rem;
+            }
+
             .credits-footer {
                 flex-direction: column;
-                gap: 0.5rem;
-                padding: 0.5rem 1rem;
+                height: 70px;
+                padding: 0.5rem var(--spacing-md);
                 text-align: center;
-                height: auto;
-                min-height: 80px;
+                gap: 0.3rem;
             }
 
             .footer-left, .footer-right {
                 justify-content: center;
+                font-size: 0.8rem;
             }
 
-            .presentation {
-                padding-top: 70px;
+            /* Mobile zoom optimization */
+            .zoom-container:hover {
+                transform: scale(1.15) !important;
             }
 
-            .menu-item {
-                padding: 0.75rem;
-                font-size: 0.9rem;
+            .zoom-container:hover .card {
+                padding: calc(var(--spacing-md) * 1.2) !important;
             }
 
-            .sidebar {
-                padding: 1rem;
+            .zoom-container:hover .section-title {
+                font-size: 2.2em !important;
+                padding: var(--spacing-md) !important;
             }
 
-            .step {
-                flex-direction: column;
-                text-align: center;
-                gap: 1rem;
+            .cards-grid .zoom-container:hover {
+                transform: scale(1.2) !important;
             }
         }
 
-        /* Scrollbar */
+        @media (max-width: 480px) {
+            .main-title {
+                font-size: 1.8rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .warning-badge {
+                padding: var(--spacing-sm) var(--spacing-md);
+                font-size: 0.9rem;
+            }
+
+            .card-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.1rem;
+            }
+
+            .card-title {
+                font-size: 1.1rem;
+            }
+
+            .card-text {
+                font-size: 0.9rem;
+            }
+
+            .start-btn {
+                padding: var(--spacing-sm) var(--spacing-lg);
+                font-size: 1rem;
+            }
+
+            .example-container {
+                padding: var(--spacing-md);
+            }
+
+            .protection-item {
+                flex-direction: column;
+                gap: var(--spacing-sm);
+                padding: var(--spacing-md);
+                text-align: center;
+            }
+
+            .protection-num {
+                width: 32px;
+                height: 32px;
+                font-size: 0.85rem;
+            }
+
+            .zoom-container:hover {
+                transform: scale(1.1) !important;
+            }
+        }
+
+        /* Light Mode Adjustments */
+        .light .card,
+        .light .step,
+        .light .detection-card,
+        .light .protection-item,
+        .light .demo-section,
+        .light .example-container {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: rgba(0,0,0,0.1);
+        }
+
+        .light .nav,
+        .light .sidebar,
+        .light .credits-footer {
+            background: rgba(248, 250, 252, 0.95);
+            border-color: rgba(0,0,0,0.1);
+        }
+
+        .light .nav-btn,
+        .light .arrow-btn {
+            background: rgba(0,0,0,0.05);
+            color: var(--text);
+        }
+
+        .light .nav-btn:hover {
+            background: rgba(0,0,0,0.1);
+        }
+
+        .light .zoom-container:hover .card {
+            background: rgba(255, 255, 255, 0.95) !important;
+            border: 2px solid var(--accent) !important;
+        }
+
+        /* Utility Classes */
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .mt-1 { margin-top: 0.5rem; }
+        .mt-2 { margin-top: 1rem; }
+        .mt-3 { margin-top: 1.5rem; }
+        .mb-1 { margin-bottom: 0.5rem; }
+        .mb-2 { margin-bottom: 1rem; }
+        .mb-3 { margin-bottom: 1.5rem; }
+        .p-2 { padding: 1rem; }
+        .p-3 { padding: 1.5rem; }
+
+        /* Print Styles */
+        @media print {
+            .nav, .nav-controls-bottom, .credits-footer, .sidebar, .progress-container {
+                display: none !important;
+            }
+            
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            
+            .slide {
+                display: block !important;
+                min-height: auto;
+                page-break-inside: avoid;
+                padding: 0 !important;
+                margin: 1cm 0;
+            }
+            
+            .zoom-container {
+                cursor: default !important;
+            }
+            
+            .zoom-container:hover {
+                transform: none !important;
+            }
+        }
+
+        /* Scrollbar Styling */
         ::-webkit-scrollbar {
             width: 8px;
+            height: 8px;
         }
 
         ::-webkit-scrollbar-track {
@@ -962,211 +1522,198 @@
             background: var(--accent);
         }
 
-        /* Light Mode Adjustments */
-        .light .card,
-        .light .threat-item,
-        .light .protection-item,
-        .light .detection-card,
-        .light .demo-scene,
-        .light .step {
-            background: rgba(255, 255, 255, 0.8);
-            border-color: rgba(0,0,0,0.1);
+        /* Selection Styling */
+        ::selection {
+            background: var(--accent);
+            color: white;
         }
 
-        .light .nav,
-        .light .sidebar,
-        .light .credits-footer {
-            background: rgba(248, 250, 252, 0.95);
-        }
-
-        .light .nav-btn,
-        .light .arrow-btn,
-        .light .slide-counter {
-            background: rgba(0,0,0,0.05);
-        }
-
-        .light .demo-chat,
-        .light .fake-video {
-            background: rgba(0,0,0,0.05);
-        }
-
-        .light .sidebar {
-            background: rgba(248, 250, 252, 0.98);
-        }
-
-        .light .menu-item {
-            background: rgba(0,0,0,0.05);
-            border-color: rgba(0,0,0,0.1);
-        }
-
-        .light .menu-item:hover, .light .menu-item.active {
-            background: rgba(239, 68, 68, 0.2);
-            border-color: var(--accent);
+        /* Focus Styles for Accessibility */
+        :focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
         }
     </style>
 </head>
 <body>
-    <!-- Animated Background -->
-    <div class="bg-animation"></div>
-    <div class="grid-pattern"></div>
+    <!-- Background Layers -->
+    <div class="bg-layers">
+        <div class="bg-gradient"></div>
+        <div class="grid-overlay"></div>
+    </div>
 
     <!-- Navigation -->
-    <nav class="nav">
+    <nav class="nav" role="navigation" aria-label="القائمة الرئيسية">
         <div class="logo">
-            <div class="logo-icon"><i class="fas fa-shield-virus"></i></div>
-            <span class="logo-text">التزييف العميق (Deep Fake) -مخاطر تقنية </span>
+            <div class="logo-icon" aria-hidden="true"><i class="fas fa-shield-virus"></i></div>
+            <span class="logo-text">التزييف العميق - مخاطر تقنية</span>
         </div>
         <div class="nav-controls">
             <button class="nav-btn" onclick="toggleTheme()" aria-label="تبديل المظهر">
-                <i class="fas fa-moon"></i>
+                <i class="fas fa-moon" aria-hidden="true"></i>
+                <span class="visually-hidden">تبديل المظهر</span>
             </button>
-            <button class="nav-btn" onclick="toggleSidebar()" aria-label="القائمة">
-                <i class="fas fa-bars"></i>
+            <button class="nav-btn" onclick="toggleContainerZoom()" id="containerZoomBtn" aria-label="تشغيل تكبير الحاوية">
+                <i class="fas fa-expand-alt" aria-hidden="true"></i>
+                <span class="visually-hidden">تكبير الحاوية</span>
+            </button>
+            <button class="nav-btn" onclick="toggleSidebar()" aria-label="فتح القائمة الجانبية">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+                <span class="visually-hidden">القائمة</span>
             </button>
         </div>
     </nav>
 
     <!-- Progress Bar -->
     <div class="progress-container">
-        <div class="progress-bar" id="progressBar"></div>
+        <div class="progress-bar" id="progressBar" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
     </div>
 
-    <!-- Sidebar -->
-    <div class="sidebar" id="sidebar">
+    <!-- Sidebar Menu -->
+    <aside class="sidebar" id="sidebar" role="navigation" aria-label="قائمة الشرائح">
         <div class="sidebar-title">
-            <i class="fas fa-list"></i>
+            <i class="fas fa-list" aria-hidden="true"></i>
             فهرس العرض
         </div>
-        <div class="menu-item active" onclick="goToSlide(0)">
+        <div class="menu-item active" onclick="goToSlide(0)" role="button" tabindex="0" aria-label="الانتقال إلى المقدمة">
             <span class="menu-num">0</span>
             <span>المقدمة</span>
         </div>
-        <div class="menu-item" onclick="goToSlide(1)">
+        <div class="menu-item" onclick="goToSlide(1)" role="button" tabindex="0" aria-label="الانتقال إلى ما هو التزييف العميق">
             <span class="menu-num">1</span>
             <span>ما هو التزييف العميق؟</span>
         </div>
-        <div class="menu-item" onclick="goToSlide(2)">
+        <div class="menu-item" onclick="goToSlide(2)" role="button" tabindex="0" aria-label="الانتقال إلى كيفية عمل التزييف العميق">
             <span class="menu-num">2</span>
             <span>كيف يتم عمل التزييف العميق؟</span>
         </div>
-        <div class="menu-item" onclick="goToSlide(3)">
+        <div class="menu-item" onclick="goToSlide(3)" role="button" tabindex="0" aria-label="الانتقال إلى كيفية اكتشاف التزييف العميق">
             <span class="menu-num">3</span>
             <span>كيف نكتشف التزييف العميق؟</span>
         </div>
-        <div class="menu-item" onclick="goToSlide(4)">
+        <div class="menu-item" onclick="goToSlide(4)" role="button" tabindex="0" aria-label="الانتقال إلى كيفية الحماية">
             <span class="menu-num">4</span>
             <span>كيف نتعامل معه ونحمي أنفسنا؟</span>
         </div>
-    </div>
+    </aside>
 
-    <!-- Main Presentation -->
-    <main class="presentation">
+    <!-- Main Content -->
+    <main class="presentation" role="main">
         <!-- Slide 0: Introduction -->
-        <section class="slide active" data-slide="0">
-            <div class="slide-container intro-slide">
-                <div class="glitch-container">
-                    <h1 class="main-title">التزييف العميق</h1>
-                </div>
-                <p class="subtitle">اشراف/اسماء محمد</p>
-                
-                <div class="warning-badge">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <span> !!!..لا تصدق كلما تسمع ولا تصدق ايضا كلما ترئ </span>
-                </div>
+        <section class="slide active" data-slide="0" aria-labelledby="slide0-title" role="region">
+            <div class="slide-container">
+                <div class="intro-slide">
+                    <div class="title-container">
+                        <h1 id="slide0-title" class="main-title zoom-container">التزييف العميق</h1>
+                        <p class="subtitle zoom-container">اشراف/اسماء محمد</p>
+                        
+                        <div class="warning-badge zoom-container" role="alert">
+                            <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span>!!!..لا تصدق كلما تسمع ولا تصدق ايضا كلما ترئ</span>
+                        </div>
+                    </div>
 
-                <div class="cards-grid">
-                    <div class="card fade-in-up delay-1">
-                        <div class="card-icon"><i class="fas fa-brain"></i></div>
-                        <h3 class="card-title">ماذا سنتعلم؟</h3>
-                        <p class="card-text">
-                            فهم ماهوا التزييف العميق، وكيف يعمل، وكيف يمكنك اكتشافه، 
-                            والأهم: كيف تحمي نفسك وعائلتك منه.
-                        </p>
+                    <div class="cards-grid">
+                        <article class="card zoom-container">
+                            <div class="card-icon" aria-hidden="true"><i class="fas fa-brain"></i></div>
+                            <h3 class="card-title">ماذا سنتعلم؟</h3>
+                            <p class="card-text">
+                                فهم ماهوا التزييف العميق، وكيف يعمل، وكيف يمكنك اكتشافه، 
+                                والأهم: كيف تحمي نفسك وعائلتك منه.
+                            </p>
+                        </article>
+                        
+                        <article class="card zoom-container">
+                            <div class="card-icon blue" aria-hidden="true"><i class="fas fa-exclamation-circle"></i></div>
+                            <h3 class="card-title">لماذا يهمك؟</h3>
+                            <p class="card-text">
+                                لأنك قد تكون ضحية للتزييف العميق دون أن تدري! يمكن استخدامه 
+                                للاحتيال، التشهير، أو التلاعب بآرائك.
+                            </p>
+                        </article>
+                        
+                        <article class="card zoom-container">
+                            <div class="card-icon green" aria-hidden="true"><i class="fas fa-shield-alt"></i></div>
+                            <h3 class="card-title">كيف نحمي أنفسنا؟</h3>
+                            <p class="card-text">
+                                سنتعلم معاً طرق بسيطة وفعالة للتعامل مع هذا الخطر 
+                                والبقاء آمنين في العالم الرقمي.
+                            </p>
+                        </article>
                     </div>
-                    <div class="card fade-in-up delay-2">
-                        <div class="card-icon blue"><i class="fas fa-exclamation-circle"></i></div>
-                        <h3 class="card-title">لماذا يهمك؟</h3>
-                        <p class="card-text">
-                            لأنك قد تكون ضحية للتزييف العميق دون أن تدري! يمكن استخدامه 
-                            للاحتيال، التشهير، أو التلاعب بآرائك.
-                        </p>
-                    </div>
-                    <div class="card fade-in-up delay-3">
-                        <div class="card-icon green"><i class="fas fa-shield-alt"></i></div>
-                        <h3 class="card-title">كيف نحمي أنفسنا؟</h3>
-                        <p class="card-text">
-                            سنتعلم معاً طرق بسيطة وفعالة للتعامل مع هذا الخطر 
-                            والبقاء آمنين في العالم الرقمي.
-                        </p>
-                    </div>
-                </div>
 
-                <button class="start-btn" onclick="nextSlide()">
-                    <span>ابدأ الرحلة</span>
-                    <i class="fas fa-arrow-left"></i>
-                </button>
+                    <button class="start-btn" onclick="nextSlide()" aria-label="ابدأ الرحلة">
+                        <span>ابدأ الرحلة</span>
+                        <i class="fas fa-arrow-left" aria-hidden="true"></i>
+                    </button>
+                </div>
             </div>
         </section>
 
         <!-- Slide 1: What is Deep Fake -->
-        <section class="slide" data-slide="1">
+        <section class="slide" data-slide="1" aria-labelledby="slide1-title" role="region">
             <div class="slide-container">
-                <div class="section-header">
+                <header class="section-header">
                     <span class="section-number">التبويب الأول</span>
-                    <h2 class="section-title">ما هو التزييف العميق؟</h2>
-                    <p class="section-subtitle">فهم الأساسيات بلغة بسيطة</p>
-                </div>
+                    <h2 id="slide1-title" class="section-title zoom-container">ما هو التزييف العميق؟</h2>
+                    <p class="section-subtitle zoom-container">فهم الأساسيات بلغة بسيطة</p>
+                </header>
 
-                <div class="card fade-in-up delay-1">
-                    <div class="card-icon"><i class="fas fa-question-circle"></i></div>
+                <article class="card zoom-container">
+                    <div class="card-icon" aria-hidden="true"><i class="fas fa-question-circle"></i></div>
                     <h3 class="card-title">تعريف مبسط</h3>
                     <p class="card-text">
                         <strong>التزييف العميق</strong> هو استخدام الذكاء الاصطناعي لإنشاء 
                         فيديوهات أو صور أو أصوات مزيفة تبدو <strong>حقيقية تماماً</strong>. 
                         تخيل لو استطاع أحدهم أن يجعل أي شخص يقول أو يفعل ما يريده في فيديو!
                     </p>
-                </div>
+                </article>
 
-                <div class="example-card fade-in-up delay-2">
+                <div class="example-container ">
                     <div class="example-label">أمثلة واقعية</div>
                     
-                    <div class="example-title">
-                        <i class="fas fa-video"></i>
-                        مثال 1: فيديوهات المشاهير
-                    </div>
-                    <div class="example-content">
-                        <p>فيديوهات لمشاهير وهم يقولون أشياء لم يقولوها أبداً:</p>
-                        <ul style="padding-right: 1.5rem; margin-top: 0.5rem;">
-                            <li>فيديو مزيف لرئيس بلدك وهوا  يعلن الحرب</li>
-                            <li>فيديوهات غير اخلاقيه لشخصيات معروفه</li>
-                          
-                        </ul>
-                    </div>
-
-                    <div class="example-title" style="margin-top: 1.5rem;">
-                        <i class="fas fa-phone-alt"></i>
-                        مثال 2: المكالمات الصوتية المزيفة
-                    </div>
-                    <div class="example-content">
-                        <p>مكالمات تبدو كأنها من أشخاص تعرفهم:</p>
-                        <ul style="padding-right: 1.5rem; margin-top: 0.5rem;">
-                            <li>ابنك "يتصل" بك طالباً المساعدة المالية</li>
-                            <li>مديرك "يطلب" تحويل أموال عاجل</li>
-                            <li>صديق "يستعير" منك مالاً عبر الهاتف</li>
-                        </ul>
+                    <div class="mb-3">
+                        <h4 class="example-title">
+                            <i class="fas fa-video" aria-hidden="true"></i>
+                            مثال 1: فيديوهات المشاهير
+                        </h4>
+                        <div class="example-content">
+                            <p>فيديوهات لمشاهير وهم يقولون أشياء لم يقولوها أبداً:</p>
+                            <ul class="mt-1">
+                                <li>فيديو مزيف لرئيس بلدك وهو يعلن الحرب</li>
+                                <li>فيديوهات غير اخلاقيه لشخصيات معروفه</li>
+                            </ul>
+                        </div>
                     </div>
 
-                    <div class="example-title" style="margin-top: 1.5rem;">
-                        <i class="fas fa-newspaper"></i>
-                        مثال 3: أخبار كاذبة
+                    <div class="mb-3">
+                        <h4 class="example-title">
+                            <i class="fas fa-phone-alt" aria-hidden="true"></i>
+                            مثال 2: المكالمات الصوتية المزيفة
+                        </h4>
+                        <div class="example-content">
+                            <p>مكالمات تبدو كأنها من أشخاص تعرفهم:</p>
+                            <ul class="mt-1">
+                                <li>ابنك "يتصل" بك طالباً المساعدة المالية</li>
+                                <li>مديرك "يطلب" تحويل أموال عاجل</li>
+                                <li>صديق "يستعير" منك مالاً عبر الهاتف</li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="example-content">
-                        <p>نشر أخبار زائفة بدعم من فيديوهات مزيفة:</p>
-                        <ul style="padding-right: 1.5rem; margin-top: 0.5rem;">
-                            <li>سياسي "يعترف" بجرائم لم يرتكبها</li>
-                            <li>شائعات عن وفاة شخصيات عامة</li>
-                            <li>أحداث كوارث "مصورة" لم تحدث</li>
-                        </ul>
+
+                    <div class="mb-3">
+                        <h4 class="example-title">
+                            <i class="fas fa-newspaper" aria-hidden="true"></i>
+                            مثال 3: أخبار كاذبة
+                        </h4>
+                        <div class="example-content">
+                            <p>نشر أخبار زائفة بدعم من فيديوهات مزيفة:</p>
+                            <ul class="mt-1">
+                                <li>سياسي "يعترف" بجرائم لم يرتكبها</li>
+                                <li>شائعات عن وفاة شخصيات عامة</li>
+                                <li>أحداث كوارث "مصورة" لم تحدث</li>
+                            </ul>
+                        </div>
                     </div>
 
                     <div class="example-result">
@@ -1174,37 +1721,57 @@
                     </div>
                 </div>
 
-                <div class="demo-scene fade-in-up delay-3">
+                <div class="demo-section ">
                     <div class="demo-header">
-                        <div class="demo-dot red"></div>
-                        <div class="demo-dot yellow"></div>
-                        <div class="demo-dot green"></div>
+                        <div class="demo-dot red" aria-hidden="true"></div>
+                        <div class="demo-dot yellow" aria-hidden="true"></div>
+                        <div class="demo-dot green" aria-hidden="true"></div>
                         <span>محاكاة فيديو مزيف</span>
                     </div>
-                    <div class="demo-content">
-                        <div class="demo-visual">
-                            <div class="fake-video">
-                                <div class="video-placeholder">
-                                    <div class="face-outline">
-                                        <div class="face-eyes">
-                                            <div class="eye"></div>
-                                            <div class="eye"></div>
-                                        </div>
-                                    </div>
-                                    <div class="deepfake-label">فيديو مزيف</div>
-                                </div>
-                            </div>
-                        </div>
+                    
+                    <div class="demo-grid">
+<div class="demo-visual">
+    <div class="video-demo-container">
+        <div class="video-wrapper">
+            <video id="deepfakeDemo" controls preload="metadata" 
+                   poster="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjMzOCIgdmlld0JveD0iMCAwIDYwMCAzMzgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSIzMzgiIGZpbGw9IiMxRTI5M0IiLz48cmVjdCB4PSIyMDAiIHk9IjEwMCIgd2lkdGg9IjIwMCIgaGVpZ2h0PSIxMzgiIGZpbGw9IiMwRjExMkEiLz48Y2lyY2xlIGN4PSIzMDAiIGN5PSIxNjkiIHI9IjQwIiBmaWxsPSJub25lIiBzdHJva2U9IiNFRjQ0NDQiIHN0cm9rZS13aWR0aD0iMyIgc3Ryb2tlLWRhc2hhcnJheT0iNSw1Ii8+PGNpcmNsZSBjeD0iMjc1IiBjeT0iMTUwIiByPSI1IiBmaWxsPSIjRUY0NDQ0Ii8+PGNpcmNsZSBjeD0iMzI1IiBjeT0iMTUwIiByPSI1IiBmaWxsPSIjRUY0NDQ0Ii8+PHBhdGggZD0iTTI3NSAxOTAgTDMxNSAxOTAgTTMyNSAxOTAgTDM2NSAxOTAiIHN0cm9rZT0iI0VGNDQ0NCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48dGV4dCB4PSIzMDAiIHk9IjI2MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSIjRjFGNUY5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7Yp9mE2YHYsSDYp9mE2KfYstin2YQ8L3RleHQ+PC9zdmc+">
+                <!-- ضع مسار الفيديو هنا -->
+                <source src="lv_0_20260209191007.mp4" type="video/mp4">
+                <source src="lv_0_٢٠٢٦٠٢٠٩١٩١٠٠٧.mp4" type="video/mp4">
+                متصفحك لا يدعم تشغيل الفيديو.
+            </video>
+            <div class="video-overlay">
+                <div class="play-btn" onclick="playVideo()">
+                    <i class="fas fa-play"></i>
+                </div>
+                <div class="video-label">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    فيديو توضيحي للتزييف العميق
+                </div>
+            </div>
+        </div>
+        <div class="video-controls">
+            <button class="video-btn" onclick="toggleVideo()">
+                <i class="fas fa-play"></i> تشغيل/إيقاف
+            </button>
+            <button class="video-btn" onclick="restartVideo()">
+                <i class="fas fa-redo"></i> إعادة
+            </button>
+            <div class="video-time" id="videoTime">00:00</div>
+        </div>
+    </div>
+</div>
+                        
                         <div class="demo-text">
-                            <h3 style="margin-bottom: 1rem;">هذا الفيديو يمكن أن يكون:</h3>
-                            <ul style="color: var(--text-muted); line-height: 1.8; padding-right: 1rem;">
-                                <li><strong>رئيس دوله</strong> يلقي تصريحات كاذبه</li>
-                                <li><strong>شخصيه اجتماعيه </strong> يتم الاضرار بسمعتها </li>
-                                <li><strong>خبير</strong> يعطي نصائح مضللة</li>
-                                <li><strong>قريبك</strong> يطلب منك مالاً</li>
+                            <h3 class="mb-2">هذا الفيديو يمكن أن يكون:</h3>
+                            <ul>
+                                <li class="mb-1"><strong>رئيس دوله</strong> يلقي تصريحات كاذبه</li>
+                                <li class="mb-1"><strong>شخصيه اجتماعيه</strong> يتم الاضرار بسمعتها</li>
+                                <li class="mb-1"><strong>خبير</strong> يعطي نصائح مضللة</li>
+                                <li class="mb-1"><strong>قريبك</strong> يطلب منك مالاً</li>
                             </ul>
-                            <p style="margin-top: 1rem; color: var(--accent); font-weight: 600;">
-                                <i class="fas fa-exclamation-triangle"></i>
+                            <p class="mt-2" style="color: var(--accent); font-weight: 600;">
+                                <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
                                 كل هذا يمكن صنعه بسهولة!
                             </p>
                         </div>
@@ -1214,16 +1781,16 @@
         </section>
 
         <!-- Slide 2: How Deep Fake Works -->
-        <section class="slide" data-slide="2">
+        <section class="slide" data-slide="2" aria-labelledby="slide2-title" role="region">
             <div class="slide-container">
-                <div class="section-header">
+                <header class="section-header">
                     <span class="section-number">التبويب الثاني</span>
-                    <h2 class="section-title">كيف يتم عمل التزييف العميق؟</h2>
-                    <p class="section-subtitle">الخطوات المبسطة وراء صناعة المحتوى المزيف</p>
-                </div>
+                    <h2 id="slide2-title" class="section-title zoom-container">كيف يتم عمل التزييف العميق؟</h2>
+                    <p class="section-subtitle zoom-container">الخطوات المبسطة وراء صناعة المحتوى المزيف</p>
+                </header>
 
-                <div class="steps-container fade-in-up delay-1">
-                    <div class="step">
+                <div class="steps-container">
+                    <article class="step zoom-container">
                         <div class="step-number">1</div>
                         <div class="step-content">
                             <h3>جمع البيانات</h3>
@@ -1231,14 +1798,14 @@
                                 يجمع المزيفون أكبر عدد ممكن من الصور والفيديوهات للشخص المستهدف.
                                 كلما زادت البيانات، كان المحتوى المزيف أكثر واقعية.
                             </p>
-                            <p style="color: var(--warning); margin-top: 0.5rem;">
-                                <i class="fas fa-lightbulb"></i>
+                            <p class="mt-1" style="color: var(--warning);">
+                                <i class="fas fa-lightbulb" aria-hidden="true"></i>
                                 هذا سبب أهمية حماية صورك على الإنترنت!
                             </p>
                         </div>
-                    </div>
+                    </article>
 
-                    <div class="step">
+                    <article class="step zoom-container">
                         <div class="step-number">2</div>
                         <div class="step-content">
                             <h3>التدريب على الذكاء الاصطناعي</h3>
@@ -1246,14 +1813,14 @@
                                 يستخدمون برامج خاصة لتعليم الذكاء الاصطناعي كيف يبدو الشخص:
                                 تعابير وجهه، حركاته، صوته، وحتى طريقة تحدثه.
                             </p>
-                            <p style="color: var(--warning); margin-top: 0.5rem;">
-                                <i class="fas fa-robot"></i>
+                            <p class="mt-1" style="color: var(--warning);">
+                                <i class="fas fa-robot" aria-hidden="true"></i>
                                 البرنامج يتعلم من آلاف الصور والفيديوهات!
                             </p>
                         </div>
-                    </div>
+                    </article>
 
-                    <div class="step">
+                    <article class="step zoom-container">
                         <div class="step-number">3</div>
                         <div class="step-content">
                             <h3>إنشاء المحتوى الجديد</h3>
@@ -1261,14 +1828,14 @@
                                 بعد التدريب، يمكن للبرنامج إنشاء فيديوهات جديدة للشخص 
                                 وهو يقول أو يفعل أشياء لم تحدث أبداً في الواقع.
                             </p>
-                            <p style="color: var(--warning); margin-top: 0.5rem;">
-                                <i class="fas fa-magic"></i>
+                            <p class="mt-1" style="color: var(--warning);">
+                                <i class="fas fa-magic" aria-hidden="true"></i>
                                 مثل ساحر رقمي يصنع واقعاً بديلاً!
                             </p>
                         </div>
-                    </div>
+                    </article>
 
-                    <div class="step">
+                    <article class="step zoom-container">
                         <div class="step-number">4</div>
                         <div class="step-content">
                             <h3>تحسين الجودة</h3>
@@ -1276,37 +1843,37 @@
                                 يستخدمون أدوات إضافية لجعل المحتوى يبدو أكثر واقعية:
                                 إضافة المؤثرات الصوتية، تحسين الإضاءة، وتنعيم الحواف.
                             </p>
-                            <p style="color: var(--warning); margin-top: 0.5rem;">
-                                <i class="fas fa-tools"></i>
+                            <p class="mt-1" style="color: var(--warning);">
+                                <i class="fas fa-tools" aria-hidden="true"></i>
                                 يصبح من الصعب جداً اكتشاف التزييف!
                             </p>
                         </div>
-                    </div>
+                    </article>
                 </div>
 
-                <div class="example-card fade-in-up delay-2">
+                <div class="example-container zoom-container">
                     <div class="example-label">معلومات مهمة</div>
-                    <div class="example-title">
-                        <i class="fas fa-clock"></i>
+                    <h4 class="example-title">
+                        <i class="fas fa-clock" aria-hidden="true"></i>
                         كم يستغرق صنع فيديو مزيف؟
-                    </div>
+                    </h4>
                     <div class="example-content">
                         <table style="width: 100%; margin-top: 1rem; border-collapse: collapse;">
                             <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
-                                <td style="padding: 0.5rem; color: var(--text-muted);">فيديو بسيط</td>
-                                <td style="padding: 0.5rem; text-align: left; font-weight: 600;">ساعات قليلة</td>
+                                <td class="p-2">فيديو بسيط</td>
+                                <td class="p-2 text-right" style="font-weight: 600;">ساعات قليلة</td>
                             </tr>
                             <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
-                                <td style="padding: 0.5rem; color: var(--text-muted);">فيديو عالي الجودة</td>
-                                <td style="padding: 0.5rem; text-align: left; font-weight: 600;">أيام</td>
+                                <td class="p-2">فيديو عالي الجودة</td>
+                                <td class="p-2 text-right" style="font-weight: 600;">أيام</td>
                             </tr>
                             <tr>
-                                <td style="padding: 0.5rem; color: var(--text-muted);">فيديو احترافي</td>
-                                <td style="padding: 0.5rem; text-align: left; font-weight: 600;">أسابيع</td>
+                                <td class="p-2">فيديو احترافي</td>
+                                <td class="p-2 text-right" style="font-weight: 600;">أسابيع</td>
                             </tr>
                         </table>
-                        <p style="margin-top: 1rem; color: var(--accent);">
-                            <i class="fas fa-exclamation-circle"></i>
+                        <p class="mt-2" style="color: var(--accent);">
+                            <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
                             اليوم، توجد تطبيقات تمكن أي شخص من صنع فيديوهات مزيفة في دقائق!
                         </p>
                     </div>
@@ -1315,71 +1882,73 @@
         </section>
 
         <!-- Slide 3: How to Detect -->
-        <section class="slide" data-slide="3">
+        <section class="slide" data-slide="3" aria-labelledby="slide3-title" role="region">
             <div class="slide-container">
-                <div class="section-header">
+                <header class="section-header">
                     <span class="section-number">التبويب الثالث</span>
-                    <h2 class="section-title">كيف نكتشف التزييف العميق؟</h2>
-                    <p class="section-subtitle">طرق بسيطة يمكن لأي شخص استخدامها</p>
-                </div>
+                    <h2 id="slide3-title" class="section-title zoom-container">كيف نكتشف التزييف العميق؟</h2>
+                    <p class="section-subtitle zoom-container">طرق بسيطة يمكن لأي شخص استخدامها</p>
+                </header>
 
-                <div class="cards-grid fade-in-up delay-1">
-                    <div class="card">
-                        <div class="card-icon"><i class="fas fa-eye"></i></div>
+                <div class="cards-grid">
+                    <article class="card zoom-container">
+                        <div class="card-icon" aria-hidden="true"><i class="fas fa-eye"></i></div>
                         <h3 class="card-title">الملاحظات البصرية</h3>
-                        <ul style="color: var(--text-muted); line-height: 1.8; padding-right: 1rem; margin-top: 0.5rem;">
+                        <ul>
                             <li>حركة الشفاه غير متزامنة مع الصوت</li>
                             <li>عدم وجود رمش العين الطبيعي</li>
                             <li>الإضاءة غير متناسقة على الوجه</li>
                             <li>حواف الوجه غير واضحة أو مشوشة</li>
                         </ul>
-                    </div>
-                    <div class="card">
-                        <div class="card-icon blue"><i class="fas fa-ear"></i></div>
+                    </article>
+                    
+                    <article class="card zoom-container">
+                        <div class="card-icon blue" aria-hidden="true"><i class="fas fa-ear"></i></div>
                         <h3 class="card-title">الملاحظات الصوتية</h3>
-                        <ul style="color: var(--text-muted); line-height: 1.8; padding-right: 1rem; margin-top: 0.5rem;">
+                        <ul>
                             <li>الصوت يبدو مسطحاً بلا مشاعر</li>
                             <li>توقفات غير طبيعية أثناء الكلام</li>
                             <li>الكلمات تنتهي فجأة</li>
                             <li>لهجة مختلفة عن المعتاد</li>
                         </ul>
-                    </div>
-                    <div class="card">
-                        <div class="card-icon green"><i class="fas fa-search"></i></div>
+                    </article>
+                    
+                    <article class="card zoom-container">
+                        <div class="card-icon green" aria-hidden="true"><i class="fas fa-search"></i></div>
                         <h3 class="card-title">التحقق من المصدر</h3>
-                        <ul style="color: var(--text-muted); line-height: 1.8; padding-right: 1rem; margin-top: 0.5rem;">
+                        <ul>
                             <li>من نشر الفيديو أولاً؟</li>
                             <li>هل المصدر موثوق ومعروف؟</li>
                             <li>هل توجد نسخة أصلية؟</li>
                             <li>ما رأي الشخص المعني نفسه؟</li>
                         </ul>
-                    </div>
+                    </article>
                 </div>
 
-                <div class="example-card fade-in-up delay-2">
+                <div class="example-container">
                     <div class="example-label">قائمة فحص سريعة</div>
-                    <div class="example-title">
-                        <i class="fas fa-clipboard-list"></i>
+                    <h4 class="example-title">
+                        <i class="fas fa-clipboard-list" aria-hidden="true"></i>
                         اسأل نفسك هذه الأسئلة
-                    </div>
+                    </h4>
                     <div class="example-content">
-                        <ol style="padding-right: 1.5rem; margin-top: 1rem; line-height: 2;">
-                            <li>هل هذا الفيديو <strong>مفاجئ جداً</strong> أو <strong>صادم</strong>؟</li>
-                            <li>هل يبدو الشخص <strong>غريباً</strong> أو <strong>مختلفاً</strong> عن المعتاد؟</li>
-                            <li>هل <strong>الجودة عالية جداً</strong> أو <strong>منخفضة جداً</strong>؟</li>
-                            <li>هل هناك <strong>أخطاء غريبة</strong> مثل عدم رمش العينين؟</li>
-                            <li>هل <strong>الصوت</strong> يبدو <strong>طبيعياً</strong>؟</li>
-                            <li>هل يمكنني <strong>التحقق</strong> من المصدر <strong>الأصلي</strong>؟</li>
+                        <ol class="mt-2">
+                            <li class="mb-1">هل هذا الفيديو <strong>مفاجئ جداً</strong> أو <strong>صادم</strong>؟</li>
+                            <li class="mb-1">هل يبدو الشخص <strong>غريباً</strong> أو <strong>مختلفاً</strong> عن المعتاد؟</li>
+                            <li class="mb-1">هل <strong>الجودة عالية جداً</strong> أو <strong>منخفضة جداً</strong>؟</li>
+                            <li class="mb-1">هل هناك <strong>أخطاء غريبة</strong> مثل عدم رمش العينين؟</li>
+                            <li class="mb-1">هل <strong>الصوت</strong> يبدو <strong>طبيعياً</strong>؟</li>
+                            <li class="mb-1">هل يمكنني <strong>التحقق</strong> من المصدر <strong>الأصلي</strong>؟</li>
                         </ol>
-                        <div style="background: rgba(16, 185, 129, 0.2); padding: 1rem; border-radius: 10px; margin-top: 1rem; border-right: 4px solid var(--success);">
-                            <strong><i class="fas fa-lightbulb"></i> نصيحة:</strong> إذا كانت الإجابة "نعم" على معظم الأسئلة، فكن متشككاً!
+                        <div class="p-2 mt-2" style="background: rgba(16, 185, 129, 0.2); border-right: 3px solid var(--success);">
+                            <strong><i class="fas fa-lightbulb" aria-hidden="true"></i> نصيحة:</strong> إذا كانت الإجابة "نعم" على معظم الأسئلة، فكن متشككاً!
                         </div>
                     </div>
                 </div>
 
-                <div class="detection-grid fade-in-up delay-3" style="margin-top: 2rem;">
-                    <div class="detection-card">
-                        <div class="detection-icon">
+                <div class="detection-grid">
+                    <article class="detection-card zoom-container">
+                        <div class="detection-icon" aria-hidden="true">
                             <i class="fas fa-tools"></i>
                         </div>
                         <h3 class="detection-title">أدوات مفيدة</h3>
@@ -1388,9 +1957,10 @@
                             <br><strong>للأصوات:</strong> استخدام Voice Authenticator
                             <br><strong>للفيديوهات:</strong> Deepware Scanner
                         </p>
-                    </div>
-                    <div class="detection-card">
-                        <div class="detection-icon">
+                    </article>
+                    
+                    <article class="detection-card zoom-container">
+                        <div class="detection-icon" aria-hidden="true">
                             <i class="fas fa-user-friends"></i>
                         </div>
                         <h3 class="detection-title">طلب المساعدة</h3>
@@ -1399,49 +1969,49 @@
                             <br><strong>استشر مختصاً:</strong> في الشك اتصل بخبير
                             <br><strong>تحقق رسمياً:</strong> من المصادر الرسمية
                         </p>
-                    </div>
+                    </article>
                 </div>
             </div>
         </section>
 
         <!-- Slide 4: Protection -->
-        <section class="slide" data-slide="4">
+        <section class="slide" data-slide="4" aria-labelledby="slide4-title" role="region">
             <div class="slide-container">
-                <div class="section-header">
+                <header class="section-header">
                     <span class="section-number">التبويب الرابع</span>
-                    <h2 class="section-title">كيف نتعامل معه ونحمي أنفسنا؟</h2>
-                    <p class="section-subtitle">إجراءات عملية للبقاء آمنين</p>
-                </div>
+                    <h2 id="slide4-title" class="section-title zoom-container">كيف نتعامل معه ونحمي أنفسنا؟</h2>
+                    <p class="section-subtitle zoom-container">إجراءات عملية للبقاء آمنين</p>
+                </header>
 
-                <div class="protection-tabs fade-in-up delay-1">
-                    <button class="tab-btn active" onclick="openTab('prevention')">
-                        <i class="fas fa-shield-alt"></i> الوقاية
+                <div class="protection-tabs">
+                    <button class="tab-btn active" onclick="openTab('prevention')" aria-label="عرض نصائح الوقاية">
+                        <i class="fas fa-shield-alt" aria-hidden="true"></i> الوقاية
                     </button>
-                    <button class="tab-btn" onclick="openTab('action')">
-                        <i class="fas fa-exclamation-triangle"></i> عند الشك
+                    <button class="tab-btn" onclick="openTab('action')" aria-label="عرض إجراءات عند الشك">
+                        <i class="fas fa-exclamation-triangle" aria-hidden="true"></i> عند الشك
                     </button>
-                    <button class="tab-btn" onclick="openTab('recovery')">
-                        <i class="fas fa-ambulance"></i> إذا وقعت ضحية
+                    <button class="tab-btn" onclick="openTab('recovery')" aria-label="عرض خطوات التعافي">
+                        <i class="fas fa-ambulance" aria-hidden="true"></i> إذا وقعت ضحية
                     </button>
                 </div>
 
                 <div id="prevention" class="tab-content active">
                     <ul class="protection-list">
-                        <li class="protection-item fade-in-up delay-1">
+                        <li class="protection-item zoom-container">
                             <div class="protection-num">1</div>
                             <div class="protection-content">
                                 <h4>حماية صورك الشخصية</h4>
                                 <p>قلل نشر صورك العائلية على وسائل التواصل. استخدم إعدادات الخصوصية القصوى. لا تشارك صوراً عالية الجودة للوجه.</p>
                             </div>
                         </li>
-                        <li class="protection-item fade-in-up delay-2">
+                        <li class="protection-item zoom-container">
                             <div class="protection-num">2</div>
                             <div class="protection-content">
                                 <h4>التوعية العائلية</h4>
                                 <p>علم أطفالك أن ليس كل ما يرونه على الإنترنت حقيقي. شارك معهم أمثلة عن التزييف العميق بلغة بسيطة.</p>
                             </div>
                         </li>
-                        <li class="protection-item fade-in-up delay-3">
+                        <li class="protection-item zoom-container">
                             <div class="protection-num">3</div>
                             <div class="protection-content">
                                 <h4>كلمات سر خاصة</h4>
@@ -1453,25 +2023,25 @@
 
                 <div id="action" class="tab-content">
                     <ul class="protection-list">
-                        <li class="protection-item fade-in-up delay-1">
+                        <li class="protection-item zoom-container">
                             <div class="protection-num">1</div>
                             <div class="protection-content">
                                 <h4>لا تتفاعل بسرعة</h4>
                                 <p>إذا تلقيت مكالمة أو رسالة مفاجئة تطلب مالاً أو معلومات شخصية، خذ وقتك للتحقق. لا تتصرف تحت الضغط.</p>
                             </div>
                         </li>
-                        <li class="protection-item fade-in-up delay-2">
+                        <li class="protection-item zoom-container">
                             <div class="protection-num">2</div>
                             <div class="protection-content">
                                 <h4>تحقق عبر قنوات أخرى</h4>
                                 <p>اتصل بالشخص المعني على رقم آخر معروف، أو راسله على تطبيق مختلف للتأكد من أنه هو بالفعل.</p>
                             </div>
                         </li>
-                        <li class="protection-item fade-in-up delay-3">
+                        <li class="protection-item zoom-container">
                             <div class="protection-num">3</div>
                             <div class="protection-content">
-                                <h4>انتظر ولا تتسرع حتا تنكشف الحقيقه</h4>
-                                <p>إذا كان الفيديو يتحدث عن موضوع مهم وخطير لا تتسرع وانتضر حت تتبين الحقيقه او تجاهله  .</p>
+                                <h4>انتظر ولا تتسرع حتى تنكشف الحقيقة</h4>
+                                <p>إذا كان الفيديو يتحدث عن موضوع مهم وخطير لا تتسرع وانتظر حتى تتبين الحقيقة او تجاهله.</p>
                             </div>
                         </li>
                     </ul>
@@ -1479,56 +2049,56 @@
 
                 <div id="recovery" class="tab-content">
                     <ul class="protection-list">
-                        <li class="protection-item fade-in-up delay-1">
+                        <li class="protection-item zoom-container">
                             <div class="protection-num">1</div>
                             <div class="protection-content">
                                 <h4>بلغ فوراً</h4>
                                 <p>إذا اكتشفت فيديو مزيفاً لك، بلغ عنه فوراً على المنصة التي نشر فيها. معظم المنصات لديها سياسات لإزالة المحتوى المزيف.</p>
                             </div>
                         </li>
-                        <li class="protection-item fade-in-up delay-2">
+                        <li class="protection-item zoom-container">
                             <div class="protection-num">2</div>
                             <div class="protection-content">
                                 <h4>أبلغ الجهات المختصة</h4>
-                                <p>في حالة الاحتيال المالي أو الابتزاز، اذهب لمركز حكومي وبلغ عنه .</p>
-                            </div>
-                        </li>
-                        <li class="protection-item fade-in-up delay-3">
-                            <div class="protection-num">3</div>
-                            <div class="protection-content">
-                         
+                                <p>في حالة الاحتيال المالي أو الابتزاز، اذهب لمركز حكومي وبلغ عنه.</p>
                             </div>
                         </li>
                     </ul>
                 </div>
 
-                <div class="example-card fade-in-up delay-4" style="margin-top: 2rem;">
+                <div class="example-container mt-3 ">
                     <div class="example-label">نصائح ذهبية</div>
-                    <div class="example-title">
-                        <i class="fas fa-graduation-cap"></i>
+                    <h4 class="example-title">
+                        <i class="fas fa-graduation-cap" aria-hidden="true"></i>
                         تذكر دائماً
-                    </div>
+                    </h4>
                     <div class="example-content">
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
-                            <div style="background: rgba(6, 182, 212, 0.1); padding: 1rem; border-radius: 10px;">
-                                <h4 style="color: var(--cyber-blue); margin-bottom: 0.5rem;"><i class="fas fa-brain"></i> فكر قبل أن تشارك</h4>
-                                <p style="color: var(--text-muted); font-size: 0.95rem;">هل هذه الصورة ضرورية للمشاركة؟</p>
+                        <div class="grid mt-2" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                            <div class="p-2" style="background: rgba(6, 182, 212, 0.1); border-radius: 8px;">
+                                <h5 style="color: var(--cyber-blue); margin-bottom: 0.5rem;">
+                                    <i class="fas fa-brain" aria-hidden="true"></i> فكر قبل أن تشارك
+                                </h5>
+                                <p style="font-size: 0.9rem;">هل هذه الصورة ضرورية للمشاركة؟</p>
                             </div>
-                            <div style="background: rgba(16, 185, 129, 0.1); padding: 1rem; border-radius: 10px;">
-                                <h4 style="color: var(--success); margin-bottom: 0.5rem;"><i class="fas fa-check-double"></i> تحقق مرتين</h4>
-                                <p style="color: var(--text-muted); font-size: 0.95rem;">من أي محتوى يبدو مشبوهاً</p>
+                            <div class="p-2" style="background: rgba(16, 185, 129, 0.1); border-radius: 8px;">
+                                <h5 style="color: var(--success); margin-bottom: 0.5rem;">
+                                    <i class="fas fa-check-double" aria-hidden="true"></i> تحقق مرتين
+                                </h5>
+                                <p style="font-size: 0.9rem;">من أي محتوى يبدو مشبوهاً</p>
                             </div>
-                            <div style="background: rgba(239, 68, 68, 0.1); padding: 1rem; border-radius: 10px;">
-                                <h4 style="color: var(--accent); margin-bottom: 0.5rem;"><i class="fas fa-share-alt"></i> انشر الوعي</h4>
-                                <p style="color: var(--text-muted); font-size: 0.95rem;">علم الآخرين ما تعلمته اليوم</p>
+                            <div class="p-2" style="background: rgba(239, 68, 68, 0.1); border-radius: 8px;">
+                                <h5 style="color: var(--accent); margin-bottom: 0.5rem;">
+                                    <i class="fas fa-share-alt" aria-hidden="true"></i> انشر الوعي
+                                </h5>
+                                <p style="font-size: 0.9rem;">علم الآخرين ما تعلمته اليوم</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div style="text-align: center; margin-top: 3rem;" class="fade-in-up delay-5">
-                    <button class="start-btn" onclick="goToSlide(0)">
-                        <i class="fas fa-redo"></i>
+                <div class="text-center mt-3">
+                    <button class="start-btn" onclick="goToSlide(0)" aria-label="إعادة العرض من البداية">
+                        <i class="fas fa-redo" aria-hidden="true"></i>
                         <span>إعادة العرض من البداية</span>
                     </button>
                 </div>
@@ -1536,208 +2106,471 @@
         </section>
     </main>
 
-    <!-- Navigation Arrows -->
-    <div class="nav-arrows">
-        <button class="arrow-btn" onclick="prevSlide()" id="prevBtn" aria-label="الشريحة السابقة">
-            <i class="fas fa-arrow-right"></i>
+    <!-- Navigation Controls -->
+    <div class="nav-controls-bottom" role="navigation" aria-label="تحكم الشرائح">
+        <button class="arrow-btn" onclick="prevSlide()" id="prevBtn" aria-label="الشريحة السابقة" aria-disabled="true">
+            <i class="fas fa-arrow-right" aria-hidden="true"></i>
         </button>
         <div class="slide-counter">
             <span id="currentSlide">1</span> / <span id="totalSlides">5</span>
         </div>
         <button class="arrow-btn" onclick="nextSlide()" id="nextBtn" aria-label="الشريحة التالية">
-            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-left" aria-hidden="true"></i>
         </button>
     </div>
 
-    <!-- Footer with Credits -->
-    <div class="credits-footer">
+    <!-- Footer -->
+    <footer class="credits-footer" role="contentinfo">
         <div class="footer-left">
             <div class="author-item">
-                <i class="fas fa-user-graduate author-icon"></i>
+                <i class="fas fa-user-graduate footer-icon" aria-hidden="true"></i>
                 <div>
-                    <div class="author-name">عرض توعوي</div>
-                    <div class="author-title">لعامة الناس</div>
+                    <div>عرض توعوي</div>
+                    <div>لعامة الناس</div>
                 </div>
             </div>
         </div>
         <div class="footer-right">
-            <i class="fas fa-shield-alt footer-icon"></i>
-            <span>التزييف العميق - دليل الحماية المبسط</span>
+            <i class="fas fa-shield-alt footer-icon" aria-hidden="true"></i>
+            <span class="zoom-container">التزييف العميق - دليل الحماية المبسط</span>
         </div>
-    </div>
+    </footer>
 
     <script>
-        // Slide Management
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.slide');
-        const totalSlides = slides.length;
-        const progressBar = document.getElementById('progressBar');
-        const currentSlideEl = document.getElementById('currentSlide');
-        const totalSlidesEl = document.getElementById('totalSlides');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
+        'use strict';
 
-        function updateSlideCounter() {
-            currentSlideEl.textContent = currentSlide + 1;
-            totalSlidesEl.textContent = totalSlides;
-        }
+        // Configuration
+        const CONFIG = {
+            totalSlides: 5,
+            transitionDuration: 300,
+            containerZoomScale: 1.2,
+            containerZoomScaleMobile: 1.15,
+            containerZoomScaleTitle: 1.3,
+            containerZoomScaleTitleMobile: 1.2
+        };
 
-        function updateProgressBar() {
-            const progress = ((currentSlide + 1) / totalSlides) * 100;
-            progressBar.style.width = `${progress}%`;
-        }
+        // State Management
+        const state = {
+            currentSlide: 0,
+            containerZoomEnabled: true,
+            sidebarOpen: false,
+            isTransitioning: false,
+            theme: 'dark'
+        };
 
-        function updateButtons() {
-            prevBtn.disabled = currentSlide === 0;
-            nextBtn.disabled = currentSlide === totalSlides - 1;
-        }
+        // DOM Elements
+        const elements = {
+            slides: document.querySelectorAll('.slide'),
+            progressBar: document.getElementById('progressBar'),
+            currentSlideEl: document.getElementById('currentSlide'),
+            totalSlidesEl: document.getElementById('totalSlides'),
+            prevBtn: document.getElementById('prevBtn'),
+            nextBtn: document.getElementById('nextBtn'),
+            sidebar: document.getElementById('sidebar'),
+            containerZoomBtn: document.getElementById('containerZoomBtn'),
+            tabContents: document.querySelectorAll('.tab-content'),
+            tabButtons: document.querySelectorAll('.tab-btn')
+        };
 
-        function updateMenu() {
-            document.querySelectorAll('.menu-item').forEach((item, index) => {
-                if (index === currentSlide) {
-                    item.classList.add('active');
-                } else {
-                    item.classList.remove('active');
-                }
+        // Initialize
+        function init() {
+            updateSlideCounter();
+            updateProgressBar();
+            updateNavigationButtons();
+            updateMenu();
+            setupEventListeners();
+            addContainerZoomEffect();
+            showNotification('مرحباً بك في عرض التزييف العميق!', 'info');
+            
+            // Set initial ARIA attributes
+            elements.slides.forEach((slide, index) => {
+                slide.setAttribute('aria-hidden', index !== 0);
             });
         }
 
+        // Navigation Functions
         function goToSlide(slideIndex) {
-            if (slideIndex < 0 || slideIndex >= totalSlides) return;
+            if (state.isTransitioning || slideIndex < 0 || slideIndex >= CONFIG.totalSlides) {
+                return;
+            }
+
+            state.isTransitioning = true;
             
-            slides[currentSlide].classList.remove('active');
-            currentSlide = slideIndex;
-            slides[currentSlide].classList.add('active');
+            // Hide current slide
+            elements.slides[state.currentSlide].classList.remove('active');
+            elements.slides[state.currentSlide].setAttribute('aria-hidden', 'true');
             
+            // Update state
+            state.currentSlide = slideIndex;
+            
+            // Show new slide
+            elements.slides[state.currentSlide].classList.add('active');
+            elements.slides[state.currentSlide].setAttribute('aria-hidden', 'false');
+            
+            // Update UI
             updateProgressBar();
             updateSlideCounter();
-            updateButtons();
+            updateNavigationButtons();
             updateMenu();
+            
+            // Close sidebar if open
+            if (state.sidebarOpen) {
+                toggleSidebar();
+            }
+            
+            // Reset transitioning flag
+            setTimeout(() => {
+                state.isTransitioning = false;
+            }, CONFIG.transitionDuration);
+            
+            // Announce slide change for screen readers
+            announceSlideChange();
         }
 
         function nextSlide() {
-            if (currentSlide < totalSlides - 1) {
-                goToSlide(currentSlide + 1);
+            if (state.currentSlide < CONFIG.totalSlides - 1) {
+                goToSlide(state.currentSlide + 1);
             }
         }
 
         function prevSlide() {
-            if (currentSlide > 0) {
-                goToSlide(currentSlide - 1);
+            if (state.currentSlide > 0) {
+                goToSlide(state.currentSlide - 1);
             }
         }
 
-        // Keyboard Navigation
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-                prevSlide();
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-                nextSlide();
-            } else if (e.key >= '0' && e.key <= '4') {
-                goToSlide(parseInt(e.key));
-            }
-        });
+        // UI Update Functions
+        function updateSlideCounter() {
+            elements.currentSlideEl.textContent = state.currentSlide + 1;
+            elements.totalSlidesEl.textContent = CONFIG.totalSlides;
+        }
 
-        // Theme Toggle
+        function updateProgressBar() {
+            const progress = ((state.currentSlide + 1) / CONFIG.totalSlides) * 100;
+            elements.progressBar.style.width = `${progress}%`;
+            elements.progressBar.setAttribute('aria-valuenow', progress);
+        }
+
+        function updateNavigationButtons() {
+            elements.prevBtn.disabled = state.currentSlide === 0;
+            elements.prevBtn.setAttribute('aria-disabled', state.currentSlide === 0);
+            elements.nextBtn.disabled = state.currentSlide === CONFIG.totalSlides - 1;
+            elements.nextBtn.setAttribute('aria-disabled', state.currentSlide === CONFIG.totalSlides - 1);
+        }
+
+        function updateMenu() {
+            document.querySelectorAll('.menu-item').forEach((item, index) => {
+                const isActive = index === state.currentSlide;
+                item.classList.toggle('active', isActive);
+                item.setAttribute('aria-current', isActive ? 'page' : 'false');
+            });
+        }
+
+        // Theme Management
         function toggleTheme() {
+            state.theme = state.theme === 'dark' ? 'light' : 'dark';
             document.body.classList.toggle('light');
-            const themeBtn = document.querySelector('.nav-btn:nth-child(1)');
-            const icon = themeBtn.querySelector('i');
-            if (document.body.classList.contains('light')) {
-                icon.className = 'fas fa-sun';
-            } else {
-                icon.className = 'fas fa-moon';
-            }
+            
+            const themeBtnIcon = document.querySelector('.nav-btn:nth-child(1) i');
+            themeBtnIcon.className = state.theme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+            
+            showNotification(`تم تبديل المظهر إلى ${state.theme === 'dark' ? 'الداكن' : 'الفاتح'}`, 'success');
         }
 
-        // Sidebar Toggle
+        // Sidebar Management
         function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('open');
+            state.sidebarOpen = !state.sidebarOpen;
+            elements.sidebar.classList.toggle('open');
+            elements.sidebar.setAttribute('aria-hidden', !state.sidebarOpen);
             
-            if (sidebar.classList.contains('open')) {
-                document.addEventListener('click', closeSidebarOnClickOutside);
+            if (state.sidebarOpen) {
+                document.addEventListener('click', handleOutsideClick);
+                document.addEventListener('keydown', handleEscapeKey);
+                elements.sidebar.focus();
             } else {
-                document.removeEventListener('click', closeSidebarOnClickOutside);
+                document.removeEventListener('click', handleOutsideClick);
+                document.removeEventListener('keydown', handleEscapeKey);
             }
         }
 
-        function closeSidebarOnClickOutside(event) {
-            const sidebar = document.getElementById('sidebar');
-            const navBtn = document.querySelector('.nav-btn:last-child');
-            
-            if (!sidebar.contains(event.target) && !navBtn.contains(event.target)) {
-                sidebar.classList.remove('open');
-                document.removeEventListener('click', closeSidebarOnClickOutside);
+        function handleOutsideClick(event) {
+            if (!elements.sidebar.contains(event.target) && 
+                !event.target.closest('.nav-btn:last-child')) {
+                toggleSidebar();
+            }
+        }
+
+        function handleEscapeKey(event) {
+            if (event.key === 'Escape' && state.sidebarOpen) {
+                toggleSidebar();
             }
         }
 
         // Tab Management
         function openTab(tabName) {
-            // Hide all tab contents
-            document.querySelectorAll('.tab-content').forEach(tab => {
+            // Hide all tabs
+            elements.tabContents.forEach(tab => {
                 tab.classList.remove('active');
+                tab.setAttribute('aria-hidden', 'true');
             });
             
-            // Remove active class from all tab buttons
-            document.querySelectorAll('.tab-btn').forEach(btn => {
+            // Deactivate all buttons
+            elements.tabButtons.forEach(btn => {
                 btn.classList.remove('active');
+                btn.setAttribute('aria-selected', 'false');
             });
             
-            // Show current tab content
-            document.getElementById(tabName).classList.add('active');
+            // Show selected tab
+            const selectedTab = document.getElementById(tabName);
+            selectedTab.classList.add('active');
+            selectedTab.setAttribute('aria-hidden', 'false');
             
-            // Add active class to current tab button
+            // Activate clicked button
             event.currentTarget.classList.add('active');
+            event.currentTarget.setAttribute('aria-selected', 'true');
         }
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            updateSlideCounter();
-            updateProgressBar();
-            updateButtons();
-            updateMenu();
+        // Container Zoom Effect
+        function addContainerZoomEffect() {
+            const containerSelectors = [
+                '.card', '.section-title', '.section-subtitle', '.example-container',
+                '.step', '.detection-card', '.protection-item', '.demo-section',
+                '.warning-badge', '.main-title', '.subtitle', '.footer-right span'
+            ];
             
-            // Add animation classes after load
-            setTimeout(() => {
-                document.querySelectorAll('.fade-in-up').forEach(el => {
-                    el.style.animationPlayState = 'running';
+            containerSelectors.forEach(selector => {
+                document.querySelectorAll(selector).forEach(container => {
+                    if (!shouldSkipContainer(container)) {
+                        setupContainerZoom(container);
+                    }
                 });
-            }, 100);
-        });
-
-        // Touch/Swipe support for mobile
-        let touchStartX = 0;
-        let touchEndX = 0;
-
-        document.addEventListener('touchstart', e => {
-            touchStartX = e.changedTouches[0].screenX;
-        });
-
-        document.addEventListener('touchend', e => {
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
-        });
-
-        function handleSwipe() {
-            const swipeThreshold = 50;
-            const diff = touchEndX - touchStartX;
+            });
             
-            if (Math.abs(diff) > swipeThreshold) {
-                if (diff > 0) {
-                    prevSlide(); // Swipe right
-                } else {
-                    nextSlide(); // Swipe left
+            console.log('✅ تم تفعيل تأثير تكبير الحاوية مع النص');
+        }
+
+        function shouldSkipContainer(container) {
+            return container.closest('button') || 
+                   container.closest('.nav-btn') || 
+                   container.closest('.arrow-btn') ||
+                   container.closest('.tab-btn') ||
+                   container.closest('.start-btn') ||
+                   container.closest('.menu-item');
+        }
+
+        function setupContainerZoom(container) {
+            // Wrap the container with zoom-container div
+            const wrapper = document.createElement('div');
+            wrapper.className = 'zoom-container';
+            
+            // Set ARIA attributes
+            wrapper.setAttribute('role', 'button');
+            wrapper.setAttribute('tabindex', '0');
+            wrapper.setAttribute('aria-label', 'انقر أو مرر لتكبير الحاوية');
+            
+            // Insert wrapper before container
+            container.parentNode.insertBefore(wrapper, container);
+            
+            // Move container inside wrapper
+            wrapper.appendChild(container);
+            
+            // Click handler for mobile
+            wrapper.addEventListener('click', handleContainerClick);
+            
+            // Keyboard support
+            wrapper.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleContainerClick(e);
                 }
+            });
+        }
+
+        function handleContainerClick(event) {
+            if (!state.containerZoomEnabled) return;
+            
+            const wrapper = event.currentTarget;
+            const isMobile = window.innerWidth <= 768;
+            
+            // Add temporary class for click feedback
+            wrapper.classList.add('zoomed-temp');
+            
+            // Announce for screen readers
+            const containerText = wrapper.textContent.substring(0, 100);
+            announce(`تكبير: ${containerText}`);
+            
+            // Remove temporary class after delay
+            setTimeout(() => {
+                wrapper.classList.remove('zoomed-temp');
+            }, isMobile ? 1500 : 1000);
+        }
+
+        function toggleContainerZoom() {
+            state.containerZoomEnabled = !state.containerZoomEnabled;
+            const containers = document.querySelectorAll('.zoom-container');
+            const btnIcon = elements.containerZoomBtn.querySelector('i');
+            
+            if (state.containerZoomEnabled) {
+                containers.forEach(container => {
+                    container.style.pointerEvents = 'auto';
+                    container.style.opacity = '1';
+                    container.style.cursor = 'pointer';
+                });
+                btnIcon.className = 'fas fa-expand-alt';
+                showNotification('تم تشغيل تكبير الحاوية مع النص', 'success');
+            } else {
+                containers.forEach(container => {
+                    container.style.pointerEvents = 'none';
+                    container.style.opacity = '0.7';
+                    container.style.cursor = 'default';
+                });
+                btnIcon.className = 'fas fa-compress-alt';
+                showNotification('تم إيقاف تكبير الحاوية', 'info');
             }
+        }
+
+        // Notification System
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            notification.setAttribute('role', 'alert');
+            notification.setAttribute('aria-live', 'polite');
+            
+            // Add type-based styling
+            if (type === 'success') {
+                notification.style.background = 'var(--success)';
+            } else if (type === 'warning') {
+                notification.style.background = 'var(--warning)';
+            } else if (type === 'error') {
+                notification.style.background = 'var(--accent)';
+            }
+            
+            document.body.appendChild(notification);
+            
+            // Auto-remove after 2 seconds
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 2000);
+        }
+
+        // Accessibility Functions
+        function announceSlideChange() {
+            const slideTitle = elements.slides[state.currentSlide].querySelector('h1, h2, .section-title')?.textContent || `الشريحة ${state.currentSlide + 1}`;
+            announce(`${slideTitle}`);
+        }
+
+        function announce(message) {
+            // Create and remove an aria-live region for announcements
+            const ariaLive = document.getElementById('aria-live') || (() => {
+                const div = document.createElement('div');
+                div.id = 'aria-live';
+                div.setAttribute('aria-live', 'polite');
+                div.setAttribute('aria-atomic', 'true');
+                div.style.cssText = 'position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;';
+                document.body.appendChild(div);
+                return div;
+            })();
+            
+            ariaLive.textContent = message;
+            setTimeout(() => {
+                ariaLive.textContent = '';
+            }, 1000);
+        }
+
+        // Event Listeners Setup
+        function setupEventListeners() {
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                // Prevent default behavior for presentation keys
+                if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', ' '].includes(e.key)) {
+                    e.preventDefault();
+                }
+                
+                switch(e.key) {
+                    case 'ArrowRight':
+                    case 'ArrowDown':
+                        prevSlide();
+                        break;
+                    case 'ArrowLeft':
+                    case 'ArrowUp':
+                        nextSlide();
+                        break;
+                    case ' ':
+                        nextSlide();
+                        break;
+                    case 'Home':
+                        goToSlide(0);
+                        break;
+                    case 'End':
+                        goToSlide(CONFIG.totalSlides - 1);
+                        break;
+                    case '1':
+                    case '2':
+                    case '3':
+                    case '4':
+                    case '5':
+                        goToSlide(parseInt(e.key) - 1);
+                        break;
+                }
+            });
+            
+            // Touch swipe support
+            let touchStartX = 0;
+            document.addEventListener('touchstart', e => {
+                touchStartX = e.changedTouches[0].screenX;
+            });
+            
+            document.addEventListener('touchend', e => {
+                const touchEndX = e.changedTouches[0].screenX;
+                const diff = touchEndX - touchStartX;
+                
+                if (Math.abs(diff) > 50) {
+                    if (diff > 0) {
+                        prevSlide();
+                    } else {
+                        nextSlide();
+                    }
+                }
+            });
+            
+            // Fullscreen support
+            document.addEventListener('fullscreenchange', updateFullscreenClass);
+            document.addEventListener('webkitfullscreenchange', updateFullscreenClass);
+            document.addEventListener('mozfullscreenchange', updateFullscreenClass);
+            
+            // Window resize handling
+            let resizeTimeout;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(handleResize, 250);
+            });
+        }
+
+        function updateFullscreenClass() {
+            if (document.fullscreenElement || 
+                document.webkitFullscreenElement || 
+                document.mozFullScreenElement) {
+                document.body.classList.add('fullscreen');
+                showNotification('وضع العرض الكامل مفعل', 'info');
+            } else {
+                document.body.classList.remove('fullscreen');
+            }
+        }
+
+        function handleResize() {
+            // Update any responsive behaviors here
+            updateNavigationButtons();
+        }
+
+        // Initialize on DOM ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
         }
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
